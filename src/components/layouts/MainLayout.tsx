@@ -30,6 +30,43 @@ const MainLayout = ({ children, tools, activeTool, onToolSelect }: MainLayoutPro
     }
   }, [activeTool, isMobileMenuOpen]);
 
+  // Add custom highlight.js styles for GitHub theme
+  useEffect(() => {
+    // Load highlight.js GitHub theme if not already loaded
+    if (typeof window !== "undefined") {
+      const linkId = "highlightjs-github-theme";
+      if (!document.getElementById(linkId)) {
+        const link = document.createElement("link");
+        link.id = linkId;
+        link.rel = "stylesheet";
+        link.href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css";
+        document.head.appendChild(link);
+      }
+      
+      // Load highlight.js and Python language support
+      const scriptIds = ["highlightjs", "highlightjs-python"];
+      if (!document.getElementById(scriptIds[0])) {
+        const script1 = document.createElement("script");
+        script1.id = scriptIds[0];
+        script1.src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js";
+        
+        const script2 = document.createElement("script");
+        script2.id = scriptIds[1];
+        script2.src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js";
+        
+        // Load scripts sequentially
+        document.body.appendChild(script1);
+        script1.onload = () => {
+          document.body.appendChild(script2);
+          script2.onload = () => {
+            // Initialize highlighting
+            (window as any).hljs.highlightAll();
+          };
+        };
+      }
+    }
+  }, []);
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
       {/* Mobile menu button */}

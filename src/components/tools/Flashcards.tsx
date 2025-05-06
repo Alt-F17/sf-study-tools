@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useToolsStore } from "@/store/toolsStore";
 
 interface Flashcard {
   front: string;
@@ -10,6 +11,9 @@ interface Flashcard {
 }
 
 const Flashcards: React.FC = () => {
+  const { flashcardsState, updateFlashcardsState, initFlashcards } = useToolsStore();
+  const { deckOrder, currentIndex, knownIndices, isFlipped } = flashcardsState;
+
   const [flashcards] = useState<Flashcard[]>([
     { front: "What does 'def' keyword do?", back: "Defines a function." },
     { front: "What is '==' used for?", back: "Checks for equality of value." },
@@ -23,62 +27,44 @@ const Flashcards: React.FC = () => {
     { front: "What is `__init__` in a class?", back: "The constructor method, called when creating an object." }
   ]);
 
-  const [deckOrder, setDeckOrder] = useState<number[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [knownIndices, setKnownIndices] = useState<number[]>([]);
-  const [isFlipped, setIsFlipped] = useState(false);
-
-  // Initialize deck on component mount
+  // Initialize flashcards if needed
   useEffect(() => {
-    const newDeckOrder = Array.from({ length: flashcards.length }, (_, i) => i);
-    // Shuffle the deck
-    for (let i = newDeckOrder.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newDeckOrder[i], newDeckOrder[j]] = [newDeckOrder[j], newDeckOrder[i]];
+    if (deckOrder.length === 0) {
+      initFlashcards(flashcards.length);
     }
-    setDeckOrder(newDeckOrder);
-    setCurrentIndex(0);
-    setKnownIndices([]);
-    setIsFlipped(false);
-  }, [flashcards.length]);
+  }, [deckOrder.length, flashcards.length, initFlashcards]);
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-      setIsFlipped(false);
+      updateFlashcardsState({ currentIndex: currentIndex - 1, isFlipped: false });
     }
   };
 
   const handleNext = () => {
     if (currentIndex < deckOrder.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      setIsFlipped(false);
+      updateFlashcardsState({ currentIndex: currentIndex + 1, isFlipped: false });
     }
   };
 
   const handleMarkKnown = () => {
     const currentCardIndex = deckOrder[currentIndex];
     if (!knownIndices.includes(currentCardIndex)) {
-      setKnownIndices([...knownIndices, currentCardIndex]);
+      updateFlashcardsState({ knownIndices: [...knownIndices, currentCardIndex] });
     }
   };
 
   const handleMarkUnknown = () => {
     const currentCardIndex = deckOrder[currentIndex];
-    setKnownIndices(knownIndices.filter(idx => idx !== currentCardIndex));
+    const updatedKnownIndices = knownIndices.filter(idx => idx !== currentCardIndex);
+    updateFlashcardsState({ knownIndices: updatedKnownIndices });
+  };
+
+  const toggleFlip = () => {
+    updateFlashcardsState({ isFlipped: !isFlipped });
   };
 
   const resetDeck = () => {
-    const newDeckOrder = [...deckOrder];
-    // Shuffle the deck
-    for (let i = newDeckOrder.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newDeckOrder[i], newDeckOrder[j]] = [newDeckOrder[j], newDeckOrder[i]];
-    }
-    setDeckOrder(newDeckOrder);
-    setCurrentIndex(0);
-    setKnownIndices([]);
-    setIsFlipped(false);
+    initFlashcards(flashcards.length);
   };
 
   // Determine if the current card is marked as known
@@ -99,7 +85,7 @@ const Flashcards: React.FC = () => {
               "w-full max-w-sm mx-auto aspect-[5/3] perspective-1000 cursor-pointer mb-6",
               "transition-all duration-500"
             )}
-            onClick={() => setIsFlipped(!isFlipped)}
+            onClick={toggleFlip}
           >
             <div 
               className={cn(

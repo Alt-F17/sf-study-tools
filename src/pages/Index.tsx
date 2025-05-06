@@ -1,9 +1,6 @@
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import MainLayout from "@/components/layouts/MainLayout";
 import WordJumble from "@/components/tools/WordJumble";
 import Flashcards from "@/components/tools/Flashcards";
@@ -11,9 +8,10 @@ import ConceptTests from "@/components/tools/ConceptTests";
 import PythonTerminal from "@/components/tools/PythonTerminal";
 import AdditionalResources from "@/components/tools/AdditionalResources";
 import PlaceholderTool from "@/components/tools/PlaceholderTool";
+import { useToolsStore } from "@/store/toolsStore";
 
 const Index = () => {
-  const [activeTool, setActiveTool] = useState<string | null>(null);
+  const { activeTool, setActiveTool } = useToolsStore();
 
   const tools = [
     { id: "word-jumble", name: "Word Jumble", component: WordJumble },

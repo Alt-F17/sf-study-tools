@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useToolsStore } from "@/store/toolsStore";
 
 interface JumbleWord {
   word: string;
@@ -12,6 +13,9 @@ interface JumbleWord {
 }
 
 const WordJumble: React.FC = () => {
+  const { wordJumbleState, updateWordJumbleState, initWordJumble } = useToolsStore();
+  const { deckOrder, currentIndex, mistakes } = wordJumbleState;
+  
   const [words] = useState<JumbleWord[]>([
     { word: "function", hint: "Defines a reusable block of code" },
     { word: "variable", hint: "Stores a value" },
@@ -35,14 +39,11 @@ const WordJumble: React.FC = () => {
     { word: "attribute", hint: "Property of an object" }
   ]);
 
-  const [deckOrder, setDeckOrder] = useState<number[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [mistakes, setMistakes] = useState(0);
   const [guess, setGuess] = useState("");
   const [scrambledWord, setScrambledWord] = useState("");
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const shuffleArray = useCallback((array: number[]): number[] => {
+  const shuffleArray = useCallback((array: string[]): string[] => {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -60,23 +61,18 @@ const WordJumble: React.FC = () => {
     return scrambled;
   }, [shuffleArray]);
 
-  const initGame = useCallback(() => {
-    const newDeckOrder = shuffleArray([...Array(words.length).keys()]);
-    setDeckOrder(newDeckOrder);
-    setCurrentIndex(0);
-    setMistakes(0);
-    setGuess("");
-    setIsCompleted(false);
-  }, [words.length, shuffleArray]);
-
   useEffect(() => {
-    initGame();
-  }, [initGame]);
+    // Initialize if deckOrder is empty
+    if (deckOrder.length === 0) {
+      initWordJumble();
+    }
+  }, [deckOrder.length, initWordJumble]);
 
   useEffect(() => {
     if (deckOrder.length > 0 && currentIndex < deckOrder.length) {
       const wordObj = words[deckOrder[currentIndex]];
       setScrambledWord(scrambleWord(wordObj.word));
+      setIsCompleted(false);
     } else if (deckOrder.length > 0) {
       setIsCompleted(true);
     }
@@ -88,11 +84,11 @@ const WordJumble: React.FC = () => {
     const wordObj = words[deckOrder[currentIndex]];
     if (guess.trim().toLowerCase() === wordObj.word.toLowerCase()) {
       toast.success("Correct!");
-      setCurrentIndex(prev => prev + 1);
+      updateWordJumbleState({ currentIndex: currentIndex + 1 });
       setGuess("");
     } else {
       toast.error("Try again!");
-      setMistakes(prev => prev + 1);
+      updateWordJumbleState({ mistakes: mistakes + 1 });
     }
   };
 
@@ -117,7 +113,7 @@ const WordJumble: React.FC = () => {
           <div className="text-center py-8">
             <h3 className="text-2xl font-bold mb-4">🎉 Completed!</h3>
             <p className="mb-4">You made {mistakes} mistakes.</p>
-            <Button onClick={initGame}>Play Again</Button>
+            <Button onClick={initWordJumble}>Play Again</Button>
           </div>
         ) : (
           <>

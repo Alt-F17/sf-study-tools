@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { useToolsStore } from "@/store/toolsStore";
 
 interface ConceptTest {
   code: string;
@@ -12,6 +13,9 @@ interface ConceptTest {
 }
 
 const ConceptTests: React.FC = () => {
+  const { conceptTestsState, updateConceptTestsState, initConceptTests } = useToolsStore();
+  const { deckOrder, currentIndex, correctCount, wrongCount, answered } = conceptTestsState;
+  
   const [conceptTests] = useState<ConceptTest[]>([
     {
       code: `def foo(x):\n    return x * x\n\nprint(foo(5))`,
@@ -25,69 +29,66 @@ const ConceptTests: React.FC = () => {
     }
   ]);
 
-  const [deckOrder, setDeckOrder] = useState<number[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [correctCount, setCorrectCount] = useState(0);
-  const [wrongCount, setWrongCount] = useState(0);
-  const [answered, setAnswered] = useState<Record<number, boolean>>({});
-
-  // Initialize deck on component mount
+  // Initialize concept tests if needed
   useEffect(() => {
-    const newDeckOrder = Array.from({ length: conceptTests.length }, (_, i) => i);
-    // Shuffle the deck
-    for (let i = newDeckOrder.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newDeckOrder[i], newDeckOrder[j]] = [newDeckOrder[j], newDeckOrder[i]];
+    if (deckOrder.length === 0) {
+      initConceptTests(conceptTests.length);
     }
-    setDeckOrder(newDeckOrder);
-    setCurrentIndex(0);
-    setCorrectCount(0);
-    setWrongCount(0);
-    setAnswered({});
-  }, [conceptTests.length]);
+  }, [deckOrder.length, conceptTests.length, initConceptTests]);
 
   const handleAnswer = (choiceIndex: number) => {
     if (answered[currentIndex]) return;
 
     const currentTestIndex = deckOrder[currentIndex];
     const isCorrect = choiceIndex === conceptTests[currentTestIndex]?.correct;
-
-    setAnswered({ ...answered, [currentIndex]: true });
+    
+    const newAnswered = { ...answered, [currentIndex]: true };
     
     if (isCorrect) {
-      setCorrectCount(correctCount + 1);
+      updateConceptTestsState({ 
+        answered: newAnswered,
+        correctCount: correctCount + 1 
+      });
     } else {
-      setWrongCount(wrongCount + 1);
+      updateConceptTestsState({ 
+        answered: newAnswered,
+        wrongCount: wrongCount + 1 
+      });
     }
   };
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+      updateConceptTestsState({ currentIndex: currentIndex - 1 });
     }
   };
 
   const handleNext = () => {
     if (currentIndex < deckOrder.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+      updateConceptTestsState({ currentIndex: currentIndex + 1 });
     }
   };
 
   const resetTests = () => {
-    const newDeckOrder = [...deckOrder];
-    // Shuffle the deck
-    for (let i = newDeckOrder.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newDeckOrder[i], newDeckOrder[j]] = [newDeckOrder[j], newDeckOrder[i]];
-    }
-    setDeckOrder(newDeckOrder);
-    setCurrentIndex(0);
-    setCorrectCount(0);
-    setWrongCount(0);
-    setAnswered({});
+    initConceptTests(conceptTests.length);
   };
 
   const progress = Math.round((Object.keys(answered).length / conceptTests.length) * 100);
+
+  // Helper function to determine if code is being rendered
+  useEffect(() => {
+    if (deckOrder.length > 0 && currentIndex < deckOrder.length) {
+      // This ensures code syntax highlighting works
+      if (typeof window !== "undefined" && (window as any).hljs) {
+        setTimeout(() => {
+          const codeElements = document.querySelectorAll('pre code');
+          codeElements.forEach((block) => {
+            (window as any).hljs.highlightElement(block);
+          });
+        }, 0);
+      }
+    }
+  }, [currentIndex, deckOrder]);
 
   return (
     <Card className="w-full max-w-3xl mx-auto">
@@ -101,7 +102,9 @@ const ConceptTests: React.FC = () => {
           <>
             <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6 overflow-auto max-h-60">
               <pre className="font-mono text-sm whitespace-pre-wrap">
-                {conceptTests[deckOrder[currentIndex]]?.code}
+                <code className="language-python">
+                  {conceptTests[deckOrder[currentIndex]]?.code}
+                </code>
               </pre>
             </div>
             

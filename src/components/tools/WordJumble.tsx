@@ -43,7 +43,8 @@ const WordJumble: React.FC = () => {
   const [scrambledWord, setScrambledWord] = useState("");
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const shuffleArray = useCallback((array: string[]): string[] => {
+  // Updated shuffleArray to be generic
+  const shuffleArray = useCallback(<T,>(array: T[]): T[] => {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -56,7 +57,10 @@ const WordJumble: React.FC = () => {
     const arr = word.split("");
     let scrambled;
     do {
-      scrambled = shuffleArray([...Array(arr.length).keys()]).map(i => arr[i]).join("");
+      // Fixed: Create an array of indices first, shuffle them, then map to characters
+      const indices = Array.from({ length: arr.length }, (_, i) => i);
+      const shuffledIndices = shuffleArray(indices);
+      scrambled = shuffledIndices.map(i => arr[i]).join("");
     } while (scrambled === word);
     return scrambled;
   }, [shuffleArray]);

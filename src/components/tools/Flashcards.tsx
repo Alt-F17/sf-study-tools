@@ -1,0 +1,180 @@
+
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+interface Flashcard {
+  front: string;
+  back: string;
+}
+
+const Flashcards: React.FC = () => {
+  const [flashcards] = useState<Flashcard[]>([
+    { front: "What does 'def' keyword do?", back: "Defines a function." },
+    { front: "What is '==' used for?", back: "Checks for equality of value." },
+    { front: "What is 'is' used for?", back: "Checks for identity (same object in memory)." },
+    { front: "What is a list?", back: "An ordered, mutable sequence of items." },
+    { front: "What is a tuple?", back: "An ordered, immutable sequence of items." },
+    { front: "What is a dictionary?", back: "An unordered collection of key-value pairs." },
+    { front: "Common method to add to a list?", back: ".append()" },
+    { front: "How to get a value from a dictionary?", back: "Using its key, e.g., my_dict['key']" },
+    { front: "What does the 'pass' statement do?", back: "Acts as a placeholder, does nothing." },
+    { front: "What is `__init__` in a class?", back: "The constructor method, called when creating an object." }
+  ]);
+
+  const [deckOrder, setDeckOrder] = useState<number[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [knownIndices, setKnownIndices] = useState<number[]>([]);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  // Initialize deck on component mount
+  useEffect(() => {
+    const newDeckOrder = Array.from({ length: flashcards.length }, (_, i) => i);
+    // Shuffle the deck
+    for (let i = newDeckOrder.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newDeckOrder[i], newDeckOrder[j]] = [newDeckOrder[j], newDeckOrder[i]];
+    }
+    setDeckOrder(newDeckOrder);
+    setCurrentIndex(0);
+    setKnownIndices([]);
+    setIsFlipped(false);
+  }, [flashcards.length]);
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+      setIsFlipped(false);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentIndex < deckOrder.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+      setIsFlipped(false);
+    }
+  };
+
+  const handleMarkKnown = () => {
+    const currentCardIndex = deckOrder[currentIndex];
+    if (!knownIndices.includes(currentCardIndex)) {
+      setKnownIndices([...knownIndices, currentCardIndex]);
+    }
+  };
+
+  const handleMarkUnknown = () => {
+    const currentCardIndex = deckOrder[currentIndex];
+    setKnownIndices(knownIndices.filter(idx => idx !== currentCardIndex));
+  };
+
+  const resetDeck = () => {
+    const newDeckOrder = [...deckOrder];
+    // Shuffle the deck
+    for (let i = newDeckOrder.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newDeckOrder[i], newDeckOrder[j]] = [newDeckOrder[j], newDeckOrder[i]];
+    }
+    setDeckOrder(newDeckOrder);
+    setCurrentIndex(0);
+    setKnownIndices([]);
+    setIsFlipped(false);
+  };
+
+  // Determine if the current card is marked as known
+  const isCurrentCardKnown = deckOrder.length > 0 && 
+    knownIndices.includes(deckOrder[currentIndex]);
+
+  return (
+    <Card className="w-full max-w-2xl mx-auto">
+      <CardHeader>
+        <CardTitle>SF2 Flashcards</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="mb-4 text-center">Click the card to flip it. Use buttons to mark as known or unknown.</p>
+        
+        {deckOrder.length > 0 && (
+          <div 
+            className={cn(
+              "w-full max-w-sm mx-auto aspect-[5/3] perspective-1000 cursor-pointer mb-6",
+              "transition-all duration-500"
+            )}
+            onClick={() => setIsFlipped(!isFlipped)}
+          >
+            <div 
+              className={cn(
+                "relative w-full h-full transition-transform duration-500",
+                "transform-style-preserve-3d",
+                isFlipped && "rotate-y-180"
+              )}
+            >
+              <div 
+                className={cn(
+                  "absolute w-full h-full flex items-center justify-center p-6",
+                  "rounded-lg shadow backface-hidden bg-gray-100",
+                  "border-2",
+                  isCurrentCardKnown ? "border-green-500" : "border-gray-200"
+                )}
+              >
+                <p className="text-xl">{flashcards[deckOrder[currentIndex]]?.front}</p>
+              </div>
+              <div 
+                className={cn(
+                  "absolute w-full h-full flex items-center justify-center p-6",
+                  "rounded-lg shadow backface-hidden bg-white rotate-y-180",
+                  "border-2",
+                  isCurrentCardKnown ? "border-green-500" : "border-gray-200"
+                )}
+              >
+                <p className="text-xl">{flashcards[deckOrder[currentIndex]]?.back}</p>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <div className="flex justify-center space-x-2 mb-4">
+          <Button 
+            onClick={handlePrevious} 
+            disabled={currentIndex === 0}
+            variant="outline"
+          >
+            &lt; Previous
+          </Button>
+          <Button 
+            onClick={handleMarkKnown}
+            disabled={isCurrentCardKnown}
+            variant="outline"
+            className="border-green-500 hover:bg-green-50"
+          >
+            Mark Known
+          </Button>
+          <Button 
+            onClick={handleMarkUnknown}
+            disabled={!isCurrentCardKnown}
+            variant="outline"
+            className="border-red-500 hover:bg-red-50"
+          >
+            Mark Unknown
+          </Button>
+          <Button 
+            onClick={handleNext}
+            disabled={currentIndex === deckOrder.length - 1}
+            variant="outline"
+          >
+            Next &gt;
+          </Button>
+        </div>
+        
+        <div className="text-center text-sm text-gray-600">
+          <p>Card {currentIndex + 1} of {flashcards.length}</p>
+          <p>Known: {knownIndices.length} | Remaining: {flashcards.length - knownIndices.length}</p>
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-center">
+        <Button onClick={resetDeck} variant="destructive">Reset Deck Progress</Button>
+      </CardFooter>
+    </Card>
+  );
+};
+
+export default Flashcards;

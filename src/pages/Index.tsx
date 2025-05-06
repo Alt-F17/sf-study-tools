@@ -1,13 +1,70 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import MainLayout from "@/components/layouts/MainLayout";
+import WordJumble from "@/components/tools/WordJumble";
+import Flashcards from "@/components/tools/Flashcards";
+import ConceptTests from "@/components/tools/ConceptTests";
+import PythonTerminal from "@/components/tools/PythonTerminal";
+import AdditionalResources from "@/components/tools/AdditionalResources";
+import PlaceholderTool from "@/components/tools/PlaceholderTool";
 
 const Index = () => {
+  const [activeTool, setActiveTool] = useState<string | null>(null);
+
+  const tools = [
+    { id: "word-jumble", name: "Word Jumble", component: WordJumble },
+    { id: "flashcards", name: "SF2 Flashcards", component: Flashcards },
+    { id: "concept-test", name: "SF2 ConcepTests", component: ConceptTests },
+    { id: "stack-queue", name: "Stack or Queue?", component: PlaceholderTool },
+    { id: "pandas-playground", name: "Pandas and Matplotlib", component: PlaceholderTool },
+    { id: "spot-bug", name: "Spot the Bug", component: PlaceholderTool },
+    { id: "list-pattern", name: "2D List Pattern Generator", component: PlaceholderTool },
+    { id: "file-io", name: "File I/O Simulation", component: PlaceholderTool },
+    { id: "exception-handling", name: "Exception Handling Practice", component: PlaceholderTool },
+    { id: "oop-diagram", name: "OOP Diagram Builder", component: PlaceholderTool },
+    { id: "sort-animator", name: "Sorting Algorithm Animator", component: PlaceholderTool },
+    { id: "complexity-calc", name: "Complexity Calculator", component: PlaceholderTool },
+    { id: "py-terminal", name: "Python Terminal Emulator", component: PythonTerminal },
+    { id: "concept-map", name: "Python Concept Map", component: PlaceholderTool },
+    { id: "additional-resources", name: "A few more Tools...", component: AdditionalResources },
+  ];
+
+  // Find the selected tool
+  const selectedTool = tools.find((tool) => tool.id === activeTool);
+  const ToolComponent = selectedTool?.component || null;
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <MainLayout
+      tools={tools}
+      activeTool={activeTool}
+      onToolSelect={(toolId) => setActiveTool(toolId)}
+    >
+      {!activeTool && (
+        <div className="flex flex-col items-center justify-center h-[80vh]">
+          <h1 className="text-4xl font-bold mb-6">SF2 Study Tools</h1>
+          <p className="text-xl text-gray-600 mb-8">Select a tool from the sidebar to get started</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-4xl">
+            {tools.slice(0, 6).map((tool) => (
+              <Card 
+                key={tool.id} 
+                className="hover:shadow-lg transition-all cursor-pointer"
+                onClick={() => setActiveTool(tool.id)}
+              >
+                <CardContent className="p-6 flex flex-col items-center justify-center h-32">
+                  <h2 className="font-medium text-lg">{tool.name}</h2>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      {activeTool && ToolComponent && <ToolComponent />}
+    </MainLayout>
   );
 };
 

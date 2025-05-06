@@ -1,0 +1,88 @@
+
+import React, { useState, useEffect } from "react";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+
+interface Tool {
+  id: string;
+  name: string;
+  component: React.ComponentType<any>;
+}
+
+interface MainLayoutProps {
+  children: React.ReactNode;
+  tools: Tool[];
+  activeTool: string | null;
+  onToolSelect: (toolId: string) => void;
+}
+
+const MainLayout = ({ children, tools, activeTool, onToolSelect }: MainLayoutProps) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // Close mobile menu when a tool is selected
+  useEffect(() => {
+    if (activeTool && isMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+    }
+  }, [activeTool, isMobileMenuOpen]);
+
+  return (
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
+      {/* Mobile menu button */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-20 p-2 bg-gray-800 text-white rounded"
+        onClick={toggleMobileMenu}
+      >
+        {isMobileMenuOpen ? "✕" : "☰"}
+      </button>
+
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          "w-full md:w-64 bg-gray-800 text-white md:min-h-screen z-10 transition-all duration-300",
+          isMobileMenuOpen 
+            ? "fixed inset-0 flex flex-col" 
+            : "hidden md:flex md:flex-col"
+        )}
+      >
+        <div className="p-4 text-center">
+          <h1 className="text-xl font-bold">SF2 Study Tools</h1>
+          <p className="text-sm text-gray-400 mt-1">Made by Felix - SF2 / 2025</p>
+        </div>
+        <Separator className="bg-gray-700" />
+        <nav className="flex-1 overflow-y-auto p-2">
+          <ul className="space-y-1">
+            {tools.map((tool) => (
+              <li key={tool.id}>
+                <button
+                  className={cn(
+                    "w-full text-left px-4 py-2 rounded transition-colors",
+                    activeTool === tool.id
+                      ? "bg-gray-700 text-white"
+                      : "hover:bg-gray-700"
+                  )}
+                  onClick={() => onToolSelect(tool.id)}
+                >
+                  {tool.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 p-4 md:p-6 overflow-y-auto">
+        <div className="max-w-5xl mx-auto">
+          {children}
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default MainLayout;

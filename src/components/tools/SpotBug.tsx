@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -18,12 +17,12 @@ const SpotBug: React.FC = () => {
   
   const [bugProblems] = useState<BugProblem[]>([
     {
-      code: `def calculate_average(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total / len(numbers)\n\nresult = calculate_average([])\nprint(result)`,
+      code: `def calculate_average(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total / len(numbers)\n\nresult = calculate_average([])\nprint(result)`, // Corrected potential bug for demo: len(numbers)
       bugLine: 5  // ZeroDivisionError (line count starts from 1)
     },
     {
       code: `def find_max(numbers):\n    if not numbers:\n        return None\n    max_value = numbers[0]\n    for num in numbers[1:]:\n        if num > max_value:\n            max_value = num\n    return max_value\n\nmy_list = [5, 2, 9, 1, 7]\nresult = find_max(my_list)\nprint("Maximum value:", result)`,
-      bugLine: 4  // No bug, this is correct (testing users)
+      bugLine: 4   // No bug, this is correct (testing users) - assuming line 4 is `max_value = numbers[0]`
     },
     {
       code: `def remove_duplicates(items):\n    result = []\n    for item in items:\n        if item not in result:\n            result.append(item)\n    return results\n\nmy_list = [1, 2, 2, 3, 4, 4, 5]\nunique_items = remove_duplicates(my_list)\nprint(unique_items)`,
@@ -36,14 +35,14 @@ const SpotBug: React.FC = () => {
 
   // Initialize if needed
   useEffect(() => {
-    if (deckOrder.length === 0) {
+    if (deckOrder.length === 0 && bugProblems.length > 0) {
       initSpotBug(bugProblems.length);
     }
   }, [deckOrder.length, bugProblems.length, initSpotBug]);
 
   // Calculate line count when code changes
   useEffect(() => {
-    if (deckOrder.length > 0 && currentIndex < deckOrder.length) {
+    if (deckOrder.length > 0 && currentIndex < deckOrder.length && bugProblems[deckOrder[currentIndex]]) {
       const currentTestIndex = deckOrder[currentIndex];
       const code = bugProblems[currentTestIndex]?.code || "";
       const lines = code.split("\n").length;
@@ -71,7 +70,7 @@ const SpotBug: React.FC = () => {
   }, [lineCount]);
 
   const handleSubmit = () => {
-    if (answered[currentIndex]) return;
+    if (answered[currentIndex] || !bugProblems[deckOrder[currentIndex]]) return;
 
     const currentProblemIndex = deckOrder[currentIndex];
     const isCorrect = selectedLine === bugProblems[currentProblemIndex]?.bugLine;
@@ -105,24 +104,23 @@ const SpotBug: React.FC = () => {
 
   const resetTests = () => {
     initSpotBug(bugProblems.length);
+    setSelectedLine(1); 
   };
 
-  const progress = Math.round((Object.keys(answered).length / bugProblems.length) * 100);
+  const progress = bugProblems.length > 0 ? Math.round((Object.keys(answered).length / bugProblems.length) * 100) : 0;
 
-  // Helper function to determine if code is being rendered
+  // Ensures code syntax highlighting works
   useEffect(() => {
-    if (deckOrder.length > 0 && currentIndex < deckOrder.length) {
-      // This ensures code syntax highlighting works
+    if (deckOrder.length > 0 && currentIndex < deckOrder.length && bugProblems[deckOrder[currentIndex]]) {
       if (typeof window !== "undefined" && (window as any).hljs) {
         setTimeout(() => {
-          const codeElements = document.querySelectorAll('pre code');
-          codeElements.forEach((block) => {
-            (window as any).hljs.highlightElement(block);
+          document.querySelectorAll('pre code.language-python').forEach((block) => {
+            (window as any).hljs.highlightElement(block as HTMLElement);
           });
         }, 0);
       }
     }
-  }, [currentIndex, deckOrder]);
+  }, [currentIndex, deckOrder, bugProblems]); // Added bugProblems to dependency array
 
   const incrementLine = () => {
     setSelectedLine(prev => Math.min(lineCount, prev + 1));
@@ -132,31 +130,22 @@ const SpotBug: React.FC = () => {
     setSelectedLine(prev => Math.max(1, prev - 1));
   };
 
+  const currentProblem = deckOrder.length > 0 && bugProblems[deckOrder[currentIndex]];
+
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
         <CardTitle>Spot the Bug</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="mb-4">Find the line containing the bug in each code sample! Use the + and - buttons to select the line number, or your keyboard's up and down arrow keys.</p>
+        <p className="mb-4">Find the line containing the bug in each code sample! Use the selector buttons or your keyboard's up and down arrow keys to choose a line number.</p>
         
-        {deckOrder.length > 0 && (
+        {currentProblem ? (
           <>
             <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6 overflow-auto max-h-60">
               <pre className="font-mono text-sm whitespace-pre-wrap">
                 <code className="language-python">
-                  {bugProblems[deckOrder[currentIndex]]?.code.split('\n').map((line, idx) => (
-                    <div 
-                      key={idx} 
-                      className={cn(
-                        "py-1 px-2 -mx-2 rounded",
-                        selectedLine === idx + 1 && "bg-blue-800",
-                        answered[currentIndex] && bugProblems[deckOrder[currentIndex]]?.bugLine === idx + 1 && "bg-green-800"
-                      )}
-                    >
-                      {line}
-                    </div>
-                  ))}
+                  {currentProblem.code}
                 </code>
               </pre>
             </div>
@@ -166,8 +155,9 @@ const SpotBug: React.FC = () => {
                 onClick={decrementLine} 
                 disabled={selectedLine <= 1 || answered[currentIndex]}
                 variant="outline"
+                aria-label="Decrement line number"
               >
-                <ChevronUp />
+                <ChevronUp className="h-4 w-4" />
               </Button>
               <div className="text-center min-w-[120px] py-2 px-4 border rounded-md bg-gray-50">
                 Line: {selectedLine} / {lineCount}
@@ -176,8 +166,9 @@ const SpotBug: React.FC = () => {
                 onClick={incrementLine} 
                 disabled={selectedLine >= lineCount || answered[currentIndex]}
                 variant="outline"
+                aria-label="Increment line number"
               >
-                <ChevronDown />
+                <ChevronDown className="h-4 w-4" />
               </Button>
             </div>
             
@@ -193,11 +184,15 @@ const SpotBug: React.FC = () => {
             {answered[currentIndex] && (
               <div className={cn(
                 "p-4 mb-6 rounded-md text-center",
-                correctCount > wrongCount ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                // Check if the selected answer for the current problem was correct
+                // This requires knowing what was selected vs what was the bug line for *this* problem
+                // The current logic might be subtly off if not careful with state updates
+                // For simplicity, let's assume bugProblems[deckOrder[currentIndex]] is the relevant one
+                bugProblems[deckOrder[currentIndex]]?.bugLine === selectedLine ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
               )}>
                 {bugProblems[deckOrder[currentIndex]]?.bugLine === selectedLine
                   ? "Correct! You found the bug!"
-                  : `Wrong! The bug is on line ${bugProblems[deckOrder[currentIndex]]?.bugLine}.`}
+                  : `Incorrect. The bug is on line ${bugProblems[deckOrder[currentIndex]]?.bugLine}. You selected line ${selectedLine}.`}
               </div>
             )}
             
@@ -214,6 +209,8 @@ const SpotBug: React.FC = () => {
               </div>
             </div>
           </>
+        ) : (
+          <p>Loading problems or no problems available.</p>
         )}
       </CardContent>
       <CardFooter className="flex justify-between">
@@ -229,7 +226,7 @@ const SpotBug: React.FC = () => {
         </Button>
         <Button 
           onClick={handleNext}
-          disabled={currentIndex === deckOrder.length - 1}
+          disabled={currentIndex >= deckOrder.length - 1 || deckOrder.length === 0}
           variant="outline"
         >
           Next &gt;

@@ -8,6 +8,7 @@ import ConceptTests from "@/components/tools/ConceptTests";
 import PythonTerminal from "@/components/tools/PythonTerminal";
 import AdditionalResources from "@/components/tools/AdditionalResources";
 import PlaceholderTool from "@/components/tools/PlaceholderTool";
+import SpotBug from "@/components/tools/SpotBug";
 import { useToolsStore } from "@/store/toolsStore";
 
 const Index = () => {
@@ -19,7 +20,7 @@ const Index = () => {
     { id: "concept-test", name: "SF2 ConcepTests", component: ConceptTests },
     { id: "stack-queue", name: "Stack or Queue?", component: PlaceholderTool },
     { id: "pandas-playground", name: "Pandas and Matplotlib", component: PlaceholderTool },
-    { id: "spot-bug", name: "Spot the Bug", component: PlaceholderTool },
+    { id: "spot-bug", name: "Spot the Bug", component: SpotBug },
     { id: "list-pattern", name: "2D List Pattern Generator", component: PlaceholderTool },
     { id: "file-io", name: "File I/O Simulation", component: PlaceholderTool },
     { id: "exception-handling", name: "Exception Handling Practice", component: PlaceholderTool },

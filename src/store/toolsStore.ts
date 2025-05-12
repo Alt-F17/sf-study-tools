@@ -26,6 +26,15 @@ interface ConceptTestState {
   answered: Record<number, boolean>;
 }
 
+// SpotBug
+interface SpotBugState {
+  deckOrder: number[];
+  currentIndex: number;
+  correctCount: number;
+  wrongCount: number;
+  answered: Record<number, boolean>;
+}
+
 interface ToolsState {
   // Active tool
   activeTool: string | null;
@@ -45,6 +54,11 @@ interface ToolsState {
   conceptTestsState: ConceptTestState;
   initConceptTests: (totalTests: number) => void;
   updateConceptTestsState: (updates: Partial<ConceptTestState>) => void;
+
+  // SpotBug state
+  spotBugState: SpotBugState;
+  initSpotBug: (totalProblems: number) => void;
+  updateSpotBugState: (updates: Partial<SpotBugState>) => void;
 }
 
 // Helper to shuffle arrays
@@ -122,6 +136,28 @@ export const useToolsStore = create<ToolsState>()(
       })),
       updateConceptTestsState: (updates) => set((state) => ({
         conceptTestsState: { ...state.conceptTestsState, ...updates }
+      })),
+
+      // SpotBug
+      spotBugState: {
+        deckOrder: [],
+        currentIndex: 0,
+        correctCount: 0,
+        wrongCount: 0,
+        answered: {},
+      },
+      initSpotBug: (totalProblems) => set((state) => ({
+        spotBugState: {
+          ...state.spotBugState,
+          deckOrder: shuffleArray(Array.from({ length: totalProblems }, (_, i) => i)),
+          currentIndex: 0,
+          correctCount: 0,
+          wrongCount: 0,
+          answered: {},
+        }
+      })),
+      updateSpotBugState: (updates) => set((state) => ({
+        spotBugState: { ...state.spotBugState, ...updates }
       })),
     }),
     {

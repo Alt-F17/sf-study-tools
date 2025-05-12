@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useToolsStore } from "@/store/toolsStore";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface BugProblem {
   code: string;
@@ -143,18 +143,19 @@ const SpotBug: React.FC = () => {
         {deckOrder.length > 0 && (
           <>
             <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6 overflow-auto max-h-60">
-              <pre className="font-mono text-sm whitespace-pre-wrap">
+              <pre className="font-mono text-sm whitespace-pre">
                 <code className="language-python">
                   {bugProblems[deckOrder[currentIndex]]?.code.split('\n').map((line, idx) => (
                     <div 
                       key={idx} 
                       className={cn(
-                        "py-1 px-2 -mx-2 rounded",
+                        "py-1 px-2 -mx-2 rounded flex",
                         selectedLine === idx + 1 && "bg-blue-800",
                         answered[currentIndex] && bugProblems[deckOrder[currentIndex]]?.bugLine === idx + 1 && "bg-green-800"
                       )}
                     >
-                      {line}
+                      <span className="text-gray-500 w-8 inline-block select-none">{idx + 1}</span>
+                      <span className="flex-1">{line}</span>
                     </div>
                   ))}
                 </code>
@@ -167,7 +168,7 @@ const SpotBug: React.FC = () => {
                 disabled={selectedLine <= 1 || answered[currentIndex]}
                 variant="outline"
               >
-                <ChevronUp />
+                <ChevronDown />
               </Button>
               <div className="text-center min-w-[120px] py-2 px-4 border rounded-md bg-gray-50">
                 Line: {selectedLine} / {lineCount}
@@ -177,7 +178,7 @@ const SpotBug: React.FC = () => {
                 disabled={selectedLine >= lineCount || answered[currentIndex]}
                 variant="outline"
               >
-                <ChevronDown />
+                <ChevronUp />
               </Button>
             </div>
             

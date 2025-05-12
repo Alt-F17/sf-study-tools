@@ -101,9 +101,14 @@ const ConceptTests: React.FC = () => {
         {deckOrder.length > 0 && (
           <>
             <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6 overflow-auto max-h-60">
-              <pre className="font-mono text-sm whitespace-pre-wrap">
+              <pre className="font-mono text-sm whitespace-pre">
                 <code className="language-python">
-                  {conceptTests[deckOrder[currentIndex]]?.code}
+                  {conceptTests[deckOrder[currentIndex]]?.code.split('\n').map((line, idx) => (
+                    <div key={idx} className="flex">
+                      <span className="text-gray-500 w-8 inline-block select-none">{idx + 1}</span>
+                      <span className="flex-1">{line}</span>
+                    </div>
+                  ))}
                 </code>
               </pre>
             </div>

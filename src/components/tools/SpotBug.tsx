@@ -8,7 +8,7 @@ import { ChevronUp, ChevronDown } from "lucide-react";
 
 interface BugProblem {
   code: string;
-  bugLine: number;
+  bugLine: number; // 1-indexed
 }
 
 const SpotBug: React.FC = () => {
@@ -17,21 +17,27 @@ const SpotBug: React.FC = () => {
   
   const [bugProblems] = useState<BugProblem[]>([
     {
-      code: `def calculate_average(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total / len(numbers)\n\nresult = calculate_average([])\nprint(result)`, // Corrected potential bug for demo: len(numbers)
-      bugLine: 5  // ZeroDivisionError (line count starts from 1)
+      code: `def calculate_average(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total / len(numbers)\n\nresult = calculate_average([])\nprint(result)`,
+      bugLine: 5
     },
     {
       code: `def find_max(numbers):\n    if not numbers:\n        return None\n    max_value = numbers[0]\n    for num in numbers[1:]:\n        if num > max_value:\n            max_value = num\n    return max_value\n\nmy_list = [5, 2, 9, 1, 7]\nresult = find_max(my_list)\nprint("Maximum value:", result)`,
-      bugLine: 4   // No bug, this is correct (testing users) - assuming line 4 is `max_value = numbers[0]`
+      bugLine: 4 
     },
     {
       code: `def remove_duplicates(items):\n    result = []\n    for item in items:\n        if item not in result:\n            result.append(item)\n    return results\n\nmy_list = [1, 2, 2, 3, 4, 4, 5]\nunique_items = remove_duplicates(my_list)\nprint(unique_items)`,
-      bugLine: 6  // NameError: results is not defined (should be result)
+      bugLine: 6
     }
   ]);
 
-  const [selectedLine, setSelectedLine] = useState<number>(1);
+  const [selectedLine, setSelectedLine] = useState<number>(1); // 1-indexed
   const [lineCount, setLineCount] = useState<number>(1);
+  const [highlightedLines, setHighlightedLines] = useState<string[]>([]);
+  const [isCodeHighlighted, setIsCodeHighlighted] = useState(false);
+
+  const currentProblem = deckOrder.length > 0 && currentIndex < deckOrder.length && bugProblems[deckOrder[currentIndex]]
+    ? bugProblems[deckOrder[currentIndex]]
+    : null;
 
   // Initialize if needed
   useEffect(() => {
@@ -40,20 +46,32 @@ const SpotBug: React.FC = () => {
     }
   }, [deckOrder.length, bugProblems.length, initSpotBug]);
 
-  // Calculate line count when code changes
+  // Process code for highlighting and line numbers
   useEffect(() => {
-    if (deckOrder.length > 0 && currentIndex < deckOrder.length && bugProblems[deckOrder[currentIndex]]) {
-      const currentTestIndex = deckOrder[currentIndex];
-      const code = bugProblems[currentTestIndex]?.code || "";
-      const lines = code.split("\n").length;
-      setLineCount(lines);
+    if (currentProblem?.code) {
+      const codeLines = currentProblem.code.split('\n');
+      setLineCount(codeLines.length);
       setSelectedLine(1); // Reset selected line on new problem
+
+      if (typeof window !== "undefined" && (window as any).hljs) {
+        const highlightedHTML = (window as any).hljs.highlight(currentProblem.code, { language: 'python', ignoreIllegals: true }).value;
+        setHighlightedLines(highlightedHTML.split('\n'));
+        setIsCodeHighlighted(true);
+      } else {
+        setHighlightedLines(codeLines);
+        setIsCodeHighlighted(false);
+      }
+    } else {
+      setHighlightedLines([]);
+      setLineCount(1);
+      setIsCodeHighlighted(false);
     }
-  }, [currentIndex, deckOrder, bugProblems]);
+  }, [currentProblem?.code]); // Only re-run when the code string itself changes
 
   // Keyboard event handler for up/down arrow keys
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (answered[currentIndex]) return; // Don't change selection if answered
       if (e.key === "ArrowUp") {
         e.preventDefault();
         setSelectedLine(prev => Math.max(1, prev - 1));
@@ -67,14 +85,12 @@ const SpotBug: React.FC = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [lineCount]);
+  }, [lineCount, answered, currentIndex]);
 
   const handleSubmit = () => {
-    if (answered[currentIndex] || !bugProblems[deckOrder[currentIndex]]) return;
+    if (answered[currentIndex] || !currentProblem) return;
 
-    const currentProblemIndex = deckOrder[currentIndex];
-    const isCorrect = selectedLine === bugProblems[currentProblemIndex]?.bugLine;
-    
+    const isCorrect = selectedLine === currentProblem.bugLine;
     const newAnswered = { ...answered, [currentIndex]: true };
     
     if (isCorrect) {
@@ -104,33 +120,29 @@ const SpotBug: React.FC = () => {
 
   const resetTests = () => {
     initSpotBug(bugProblems.length);
-    setSelectedLine(1); 
+    // setSelectedLine(1) will be handled by the useEffect for currentProblem.code
   };
 
   const progress = bugProblems.length > 0 ? Math.round((Object.keys(answered).length / bugProblems.length) * 100) : 0;
 
-  // Ensures code syntax highlighting works
-  useEffect(() => {
-    if (deckOrder.length > 0 && currentIndex < deckOrder.length && bugProblems[deckOrder[currentIndex]]) {
-      if (typeof window !== "undefined" && (window as any).hljs) {
-        setTimeout(() => {
-          document.querySelectorAll('pre code.language-python').forEach((block) => {
-            (window as any).hljs.highlightElement(block as HTMLElement);
-          });
-        }, 0);
-      }
-    }
-  }, [currentIndex, deckOrder, bugProblems]); // Added bugProblems to dependency array
-
   const incrementLine = () => {
+    if (answered[currentIndex]) return;
     setSelectedLine(prev => Math.min(lineCount, prev + 1));
   };
 
   const decrementLine = () => {
+     if (answered[currentIndex]) return;
     setSelectedLine(prev => Math.max(1, prev - 1));
   };
-
-  const currentProblem = deckOrder.length > 0 && bugProblems[deckOrder[currentIndex]];
+  
+  const lineNumberStyle: React.CSSProperties = {
+    color: '#6b7280', // gray-500
+    marginRight: '1em',
+    userSelect: 'none',
+    minWidth: '2.5em', // Adjust as needed
+    textAlign: 'right',
+    display: 'inline-block',
+  };
 
   return (
     <Card className="w-full max-w-3xl mx-auto">
@@ -140,12 +152,45 @@ const SpotBug: React.FC = () => {
       <CardContent>
         <p className="mb-4">Find the line containing the bug in each code sample! Use the selector buttons or your keyboard's up and down arrow keys to choose a line number.</p>
         
-        {currentProblem ? (
+        {currentProblem && deckOrder.length > 0 ? (
           <>
             <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6 overflow-auto max-h-60">
               <pre className="font-mono text-sm whitespace-pre-wrap">
-                <code className="language-python">
-                  {currentProblem.code}
+                <code>
+                  {highlightedLines.map((lineContent, idx) => {
+                    const lineNum = idx + 1;
+                    const isBugLine = currentProblem.bugLine === lineNum;
+                    const isSelected = selectedLine === lineNum;
+                    const hasBeenAnswered = answered[currentIndex];
+
+                    return (
+                      <div 
+                        key={idx} 
+                        className={cn(
+                          "flex items-start", // Use items-start for wrapped lines
+                          "py-0.5 px-2 -mx-2 rounded", 
+                          {
+                            "bg-blue-700 text-white": isSelected && !hasBeenAnswered,
+                            "bg-green-700 text-white": hasBeenAnswered && isBugLine,
+                            "bg-red-700 text-white": hasBeenAnswered && isSelected && !isBugLine,
+                          }
+                        )}
+                      >
+                        <span style={{
+                          ...lineNumberStyle,
+                          // Make line number more visible on selection/feedback backgrounds
+                          color: (isSelected && !hasBeenAnswered) || (hasBeenAnswered && (isBugLine || (isSelected && !isBugLine))) ? '#e5e7eb' : '#6b7280',
+                        }}>
+                          {lineNum}
+                        </span>
+                        {isCodeHighlighted ? (
+                           <span className="flex-grow" dangerouslySetInnerHTML={{ __html: lineContent }} />
+                        ) : (
+                           <span className="flex-grow">{lineContent}</span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </code>
               </pre>
             </div>
@@ -184,20 +229,15 @@ const SpotBug: React.FC = () => {
             {answered[currentIndex] && (
               <div className={cn(
                 "p-4 mb-6 rounded-md text-center",
-                // Check if the selected answer for the current problem was correct
-                // This requires knowing what was selected vs what was the bug line for *this* problem
-                // The current logic might be subtly off if not careful with state updates
-                // For simplicity, let's assume bugProblems[deckOrder[currentIndex]] is the relevant one
-                bugProblems[deckOrder[currentIndex]]?.bugLine === selectedLine ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                currentProblem.bugLine === selectedLine ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
               )}>
-                {bugProblems[deckOrder[currentIndex]]?.bugLine === selectedLine
+                {currentProblem.bugLine === selectedLine
                   ? "Correct! You found the bug!"
-                  : `Incorrect. The bug is on line ${bugProblems[deckOrder[currentIndex]]?.bugLine}. You selected line ${selectedLine}.`}
+                  : `Incorrect. The bug is on line ${currentProblem.bugLine}. You selected line ${selectedLine}.`}
               </div>
             )}
             
-            <Progress value={progress} className="mb-4" />
-            
+            <Progress value={progress} className="mb-4" />            
             <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
               <div>
                 <span>Completed: {Object.keys(answered).length} / {bugProblems.length}</span>
@@ -210,7 +250,7 @@ const SpotBug: React.FC = () => {
             </div>
           </>
         ) : (
-          <p>Loading problems or no problems available.</p>
+          <p>Loading bug problems...</p>
         )}
       </CardContent>
       <CardFooter className="flex justify-between">

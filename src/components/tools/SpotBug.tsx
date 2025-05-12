@@ -9,6 +9,7 @@ import { ChevronUp, ChevronDown } from "lucide-react";
 interface BugProblem {
   code: string;
   bugLine: number; // 1-indexed
+  bugDescription: string; // New field for bug description
 }
 
 const SpotBug: React.FC = () => {
@@ -18,15 +19,18 @@ const SpotBug: React.FC = () => {
   const [bugProblems] = useState<BugProblem[]>([
     {
       code: `def calculate_average(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total / len(numbers)\n\nresult = calculate_average([])\nprint(result)`,
-      bugLine: 5
+      bugLine: 5,
+      bugDescription: "ZeroDivisionError: Division by zero occurs if an empty list is passed, as len(numbers) will be 0."
     },
     {
       code: `def find_max(numbers):\n    if not numbers:\n        return None\n    max_value = numbers[0]\n    for num in numbers[1:]:\n        if num > max_value:\n            max_value = num\n    return max_value\n\nmy_list = [5, 2, 9, 1, 7]\nresult = find_max(my_list)\nprint("Maximum value:", result)`,
-      bugLine: 4 
+      bugLine: 4, 
+      bugDescription: "This code is actually correct! The 'bug' is a trick question to test attention to detail. Line 4 correctly initializes max_value."
     },
     {
       code: `def remove_duplicates(items):\n    result = []\n    for item in items:\n        if item not in result:\n            result.append(item)\n    return results\n\nmy_list = [1, 2, 2, 3, 4, 4, 5]\nunique_items = remove_duplicates(my_list)\nprint(unique_items)`,
-      bugLine: 6
+      bugLine: 6,
+      bugDescription: "NameError: The variable 'results' is referenced before assignment (typo, should be 'result')."
     }
   ]);
 
@@ -66,12 +70,12 @@ const SpotBug: React.FC = () => {
       setLineCount(1);
       setIsCodeHighlighted(false);
     }
-  }, [currentProblem?.code]); // Only re-run when the code string itself changes
+  }, [currentProblem?.code]); 
 
   // Keyboard event handler for up/down arrow keys
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (answered[currentIndex]) return; // Don't change selection if answered
+      if (answered[currentIndex]) return; 
       if (e.key === "ArrowUp") {
         e.preventDefault();
         setSelectedLine(prev => Math.max(1, prev - 1));
@@ -120,7 +124,6 @@ const SpotBug: React.FC = () => {
 
   const resetTests = () => {
     initSpotBug(bugProblems.length);
-    // setSelectedLine(1) will be handled by the useEffect for currentProblem.code
   };
 
   const progress = bugProblems.length > 0 ? Math.round((Object.keys(answered).length / bugProblems.length) * 100) : 0;
@@ -136,10 +139,10 @@ const SpotBug: React.FC = () => {
   };
   
   const lineNumberStyle: React.CSSProperties = {
-    color: '#6b7280', // gray-500
+    color: '#6b7280', 
     marginRight: '1em',
     userSelect: 'none',
-    minWidth: '2.5em', // Adjust as needed
+    minWidth: '2.5em', 
     textAlign: 'right',
     display: 'inline-block',
   };
@@ -154,7 +157,7 @@ const SpotBug: React.FC = () => {
         
         {currentProblem && deckOrder.length > 0 ? (
           <>
-            <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6 overflow-auto max-h-60">
+            <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6"> {/* Removed max-h-60 and overflow-auto */}
               <pre className="font-mono text-sm whitespace-pre-wrap">
                 <code>
                   {highlightedLines.map((lineContent, idx) => {
@@ -167,7 +170,7 @@ const SpotBug: React.FC = () => {
                       <div 
                         key={idx} 
                         className={cn(
-                          "flex items-start", // Use items-start for wrapped lines
+                          "flex items-start",
                           "py-0.5 px-2 -mx-2 rounded", 
                           {
                             "bg-blue-700 text-white": isSelected && !hasBeenAnswered,
@@ -178,7 +181,6 @@ const SpotBug: React.FC = () => {
                       >
                         <span style={{
                           ...lineNumberStyle,
-                          // Make line number more visible on selection/feedback backgrounds
                           color: (isSelected && !hasBeenAnswered) || (hasBeenAnswered && (isBugLine || (isSelected && !isBugLine))) ? '#e5e7eb' : '#6b7280',
                         }}>
                           {lineNum}
@@ -232,8 +234,8 @@ const SpotBug: React.FC = () => {
                 currentProblem.bugLine === selectedLine ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
               )}>
                 {currentProblem.bugLine === selectedLine
-                  ? "Correct! You found the bug!"
-                  : `Incorrect. The bug is on line ${currentProblem.bugLine}. You selected line ${selectedLine}.`}
+                  ? `Correct! You found the bug! ${currentProblem.bugDescription}`
+                  : `Incorrect. The bug is on line ${currentProblem.bugLine}. You selected line ${selectedLine}. ${currentProblem.bugDescription}`}
               </div>
             )}
             

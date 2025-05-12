@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -29,19 +28,42 @@ const ConceptTests: React.FC = () => {
     }
   ]);
 
+  const [processedCodeLines, setProcessedCodeLines] = useState<string[]>([]);
+  const [isCodeHighlighted, setIsCodeHighlighted] = useState(false);
+
+  const currentTest = deckOrder.length > 0 && currentIndex < deckOrder.length && conceptTests[deckOrder[currentIndex]]
+    ? conceptTests[deckOrder[currentIndex]]
+    : null;
+
   // Initialize concept tests if needed
   useEffect(() => {
-    if (deckOrder.length === 0) {
+    if (deckOrder.length === 0 && conceptTests.length > 0) {
       initConceptTests(conceptTests.length);
     }
   }, [deckOrder.length, conceptTests.length, initConceptTests]);
 
-  const handleAnswer = (choiceIndex: number) => {
-    if (answered[currentIndex]) return;
+  // Process code for highlighting and line numbers
+  useEffect(() => {
+    if (currentTest?.code) {
+      if (typeof window !== "undefined" && (window as any).hljs) {
+        const highlightedHTML = (window as any).hljs.highlight(currentTest.code, { language: 'python', ignoreIllegals: true }).value;
+        setProcessedCodeLines(highlightedHTML.split('\n'));
+        setIsCodeHighlighted(true);
+      } else {
+        setProcessedCodeLines(currentTest.code.split('\n'));
+        setIsCodeHighlighted(false);
+      }
+    } else {
+      setProcessedCodeLines([]);
+      setIsCodeHighlighted(false);
+    }
+  }, [currentTest?.code]);
 
-    const currentTestIndex = deckOrder[currentIndex];
-    const isCorrect = choiceIndex === conceptTests[currentTestIndex]?.correct;
-    
+
+  const handleAnswer = (choiceIndex: number) => {
+    if (answered[currentIndex] || !currentTest) return;
+
+    const isCorrect = choiceIndex === currentTest.correct;
     const newAnswered = { ...answered, [currentIndex]: true };
     
     if (isCorrect) {
@@ -73,22 +95,16 @@ const ConceptTests: React.FC = () => {
     initConceptTests(conceptTests.length);
   };
 
-  const progress = Math.round((Object.keys(answered).length / conceptTests.length) * 100);
+  const progress = conceptTests.length > 0 ? Math.round((Object.keys(answered).length / conceptTests.length) * 100) : 0;
 
-  // Helper function to determine if code is being rendered
-  useEffect(() => {
-    if (deckOrder.length > 0 && currentIndex < deckOrder.length) {
-      // This ensures code syntax highlighting works
-      if (typeof window !== "undefined" && (window as any).hljs) {
-        setTimeout(() => {
-          const codeElements = document.querySelectorAll('pre code');
-          codeElements.forEach((block) => {
-            (window as any).hljs.highlightElement(block);
-          });
-        }, 0);
-      }
-    }
-  }, [currentIndex, deckOrder]);
+  const lineNumberStyle: React.CSSProperties = {
+    color: '#6b7280', // gray-500
+    marginRight: '1em',
+    userSelect: 'none',
+    minWidth: '2.5em', // Adjust as needed for number of lines
+    textAlign: 'right',
+    display: 'inline-block',
+  };
 
   return (
     <Card className="w-full max-w-3xl mx-auto">
@@ -98,19 +114,28 @@ const ConceptTests: React.FC = () => {
       <CardContent>
         <p className="mb-4">All of Louisa's ConceptTests all in one place! Can you solve them all?</p>
         
-        {deckOrder.length > 0 && (
+        {currentTest && deckOrder.length > 0 ? (
           <>
             <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6 overflow-auto max-h-60">
               <pre className="font-mono text-sm whitespace-pre-wrap">
-                <code className="language-python">
-                  {conceptTests[deckOrder[currentIndex]]?.code}
+                <code>
+                  {processedCodeLines.map((line, idx) => (
+                    <div key={idx} className="flex">
+                      <span style={lineNumberStyle}>{idx + 1}</span>
+                      {isCodeHighlighted ? (
+                        <span dangerouslySetInnerHTML={{ __html: line }} />
+                      ) : (
+                        <span>{line}</span>
+                      )}
+                    </div>
+                  ))}
                 </code>
               </pre>
             </div>
             
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 mb-6">
-              {conceptTests[deckOrder[currentIndex]]?.choices.map((choice, idx) => {
-                const isCorrectChoice = idx === conceptTests[deckOrder[currentIndex]]?.correct;
+              {currentTest.choices.map((choice, idx) => {
+                const isCorrectChoice = idx === currentTest.correct;
                 const hasAnswered = answered[currentIndex];
                 
                 return (
@@ -121,8 +146,8 @@ const ConceptTests: React.FC = () => {
                     variant="outline"
                     className={cn(
                       "h-auto py-3 justify-start text-left",
-                      hasAnswered && isCorrectChoice && "bg-green-100 border-green-500",
-                      hasAnswered && !isCorrectChoice && "bg-red-100 border-red-500"
+                      hasAnswered && isCorrectChoice && "bg-green-100 border-green-500 text-green-800",
+                      hasAnswered && !isCorrectChoice && answered[currentIndex] && "bg-red-100 border-red-500 text-red-800"
                     )}
                   >
                     {choice}
@@ -131,8 +156,7 @@ const ConceptTests: React.FC = () => {
               })}
             </div>
             
-            <Progress value={progress} className="mb-4" />
-            
+            <Progress value={progress} className="mb-4" />           
             <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
               <div>
                 <span>Completed: {Object.keys(answered).length} / {conceptTests.length}</span>
@@ -144,6 +168,8 @@ const ConceptTests: React.FC = () => {
               </div>
             </div>
           </>
+        ) : (
+          <p>Loading concept tests...</p>
         )}
       </CardContent>
       <CardFooter className="flex justify-between">
@@ -159,7 +185,7 @@ const ConceptTests: React.FC = () => {
         </Button>
         <Button 
           onClick={handleNext}
-          disabled={currentIndex === deckOrder.length - 1}
+          disabled={currentIndex >= deckOrder.length - 1 || deckOrder.length === 0}
           variant="outline"
         >
           Next &gt;

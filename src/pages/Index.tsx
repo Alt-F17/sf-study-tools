@@ -9,6 +9,7 @@ import PythonTerminal from "@/components/tools/PythonTerminal";
 import AdditionalResources from "@/components/tools/AdditionalResources";
 import PlaceholderTool from "@/components/tools/PlaceholderTool";
 import SpotBug from "@/components/tools/SpotBug";
+import StepByStepAnimator from "@/components/tools/StepByStepAnimator";
 import { useToolsStore } from "@/store/toolsStore";
 
 const Index = () => {
@@ -24,7 +25,7 @@ const Index = () => {
     { id: "list-pattern", name: "Final Boss Problems", component: PlaceholderTool },
     { id: "file-io", name: "File I/O Simulation", component: PlaceholderTool },
     { id: "oop-diagram", name: "OOP Diagram Builder", component: PlaceholderTool },
-    { id: "sort-animator", name: "Step-by-Step Animator", component: PlaceholderTool },
+    { id: "sort-animator", name: "Step-by-Step Animator", component: StepByStepAnimator },
     { id: "complexity-calc", name: "Complexity Calculator", component: PlaceholderTool },
     { id: "py-terminal", name: "Python Terminal Emulator", component: PythonTerminal },
     { id: "concept-map", name: "Python Concept Map", component: PlaceholderTool },

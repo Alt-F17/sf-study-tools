@@ -10,6 +10,7 @@ import AdditionalResources from "@/components/tools/AdditionalResources";
 import PlaceholderTool from "@/components/tools/PlaceholderTool";
 import SpotBug from "@/components/tools/SpotBug";
 import StepByStepAnimator from "@/components/tools/StepByStepAnimator";
+import StackOrQueue from "@/components/tools/StackOrQueue";
 import { useToolsStore } from "@/store/toolsStore";
 
 const Index = () => {
@@ -19,7 +20,7 @@ const Index = () => {
     { id: "word-jumble", name: "Word Jumble", component: WordJumble },
     { id: "flashcards", name: "SF2 Flashcards", component: Flashcards },
     { id: "concept-test", name: "SF2 ConcepTests", component: ConceptTests },
-    { id: "stack-queue", name: "Stack or Queue?", component: PlaceholderTool },
+    { id: "stack-queue", name: "Stack or Queue?", component: StackOrQueue },
     { id: "pandas-playground", name: "Pandas and Matplotlib", component: PlaceholderTool },
     { id: "spot-bug", name: "Spot the Bug", component: SpotBug },
     { id: "list-pattern", name: "Final Boss Problems", component: PlaceholderTool },

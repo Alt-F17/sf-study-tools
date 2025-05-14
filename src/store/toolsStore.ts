@@ -36,13 +36,17 @@ interface SpotBugState {
 }
 
 // FileIO
+type FileType = 'txt' | 'csv' | 'json' | 'py';
+
+interface FileData {
+  id: string;
+  name: string;
+  type: FileType;
+  content: string;
+}
+
 interface FileIOState {
-  files: Array<{
-    id: string;
-    name: string;
-    type: string;
-    content: string;
-  }>;
+  files: FileData[];
   activeFileId: string;
   codeInput: string;
   outputText: string;
@@ -212,7 +216,7 @@ export const useToolsStore = create<ToolsState>()(
               type: 'py',
               content: '# Helper functions\n\ndef read_file(filename):\n    with open(filename, "r") as f:\n        return f.read()\n\ndef write_file(filename, content):\n    with open(filename, "w") as f:\n        f.write(content)'
             }
-          ],
+          ] as FileData[],
           activeFileId: 'file1',
           codeInput: '# Open a file for reading\nwith open("sample.txt", "r") as file:\n    content = file.read()\n    print(content)',
           outputText: '',

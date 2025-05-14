@@ -1,5 +1,6 @@
 
 import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
@@ -218,7 +219,7 @@ export function SidebarMenuButton({
   ...props
 }: SidebarMenuButtonProps) {
   const { isOpen } = useSidebar();
-  const Comp = asChild ? React.Slot : "button";
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp

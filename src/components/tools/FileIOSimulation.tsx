@@ -464,7 +464,7 @@ const FileIOSimulation: React.FC = () => {
           // Check if the variable is a file content
           if (varValue.includes('.read()')) {
             // The variable contains file content
-            const fileReadRegex = /open\(['"]([^'"]+)['"]\s*,\s*['"]r['"]\)/.exec(code);
+            const fileReadRegex = /open\(['"]([^'"]+)['"]\s*,\s*['"]r['"]\)/g.exec(code);
             if (fileReadRegex) {
               const filename = fileReadRegex[1];
               const parts = filename.split('.');

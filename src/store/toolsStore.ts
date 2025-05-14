@@ -35,6 +35,21 @@ interface SpotBugState {
   answered: Record<number, boolean>;
 }
 
+// FileIO
+interface FileIOState {
+  files: Array<{
+    id: string;
+    name: string;
+    type: string;
+    content: string;
+  }>;
+  activeFileId: string;
+  codeInput: string;
+  outputText: string;
+  currentChallengeId: string | null;
+  completedChallenges: string[];
+}
+
 interface ToolsState {
   // Active tool
   activeTool: string | null;
@@ -59,6 +74,14 @@ interface ToolsState {
   spotBugState: SpotBugState;
   initSpotBug: (totalProblems: number) => void;
   updateSpotBugState: (updates: Partial<SpotBugState>) => void;
+  
+  // FileIO state
+  fileIOState: FileIOState | null;
+  initFileIO: () => void;
+  updateFileIOState: (updates: Partial<FileIOState>) => void;
+  
+  // Reset all tools
+  resetAllTools: () => void;
 }
 
 // Helper to shuffle arrays
@@ -158,6 +181,77 @@ export const useToolsStore = create<ToolsState>()(
       })),
       updateSpotBugState: (updates) => set((state) => ({
         spotBugState: { ...state.spotBugState, ...updates }
+      })),
+      
+      // FileIO
+      fileIOState: null,
+      initFileIO: () => set({
+        fileIOState: {
+          files: [
+            {
+              id: 'file1',
+              name: 'sample',
+              type: 'txt',
+              content: 'This is a sample text file.\nIt has multiple lines.\nYou can read from it.'
+            },
+            {
+              id: 'file2',
+              name: 'data',
+              type: 'csv',
+              content: 'name,age,city\nJohn,24,New York\nSarah,32,Boston\nMike,28,Chicago'
+            },
+            {
+              id: 'file3',
+              name: 'config',
+              type: 'json',
+              content: '{\n  "appName": "File I/O Simulator",\n  "version": "1.0.0",\n  "settings": {\n    "darkMode": false,\n    "fontSize": 14\n  }\n}'
+            },
+            {
+              id: 'file4',
+              name: 'helper',
+              type: 'py',
+              content: '# Helper functions\n\ndef read_file(filename):\n    with open(filename, "r") as f:\n        return f.read()\n\ndef write_file(filename, content):\n    with open(filename, "w") as f:\n        f.write(content)'
+            }
+          ],
+          activeFileId: 'file1',
+          codeInput: '# Open a file for reading\nwith open("sample.txt", "r") as file:\n    content = file.read()\n    print(content)',
+          outputText: '',
+          currentChallengeId: null,
+          completedChallenges: [],
+        }
+      }),
+      updateFileIOState: (updates) => set((state) => ({
+        fileIOState: state.fileIOState ? { ...state.fileIOState, ...updates } : updates as FileIOState
+      })),
+      
+      // Reset all tools
+      resetAllTools: () => set((state) => ({
+        wordJumbleState: {
+          deckOrder: [],
+          currentIndex: 0,
+          mistakes: 0,
+        },
+        flashcardsState: {
+          deckOrder: [],
+          currentIndex: 0,
+          knownIndices: [],
+          isFlipped: false,
+        },
+        conceptTestsState: {
+          deckOrder: [],
+          currentIndex: 0,
+          correctCount: 0,
+          wrongCount: 0,
+          answered: {},
+        },
+        spotBugState: {
+          deckOrder: [],
+          currentIndex: 0,
+          correctCount: 0,
+          wrongCount: 0,
+          answered: {},
+        },
+        fileIOState: null
       })),
     }),
     {

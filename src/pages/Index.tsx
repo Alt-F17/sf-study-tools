@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import MainLayout from "@/components/layouts/MainLayout";

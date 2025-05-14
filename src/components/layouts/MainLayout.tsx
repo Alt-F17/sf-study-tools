@@ -2,10 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { RotateCcw } from "lucide-react"; 
-import { useToolsStore } from "@/store/toolsStore";
-import { toast } from "sonner";
 
 interface Tool {
   id: string;
@@ -22,7 +18,6 @@ interface MainLayoutProps {
 
 const MainLayout = ({ children, tools, activeTool, onToolSelect }: MainLayoutProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const resetAllTools = useToolsStore(state => state.resetAllTools);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -34,11 +29,6 @@ const MainLayout = ({ children, tools, activeTool, onToolSelect }: MainLayoutPro
       setIsMobileMenuOpen(false);
     }
   }, [activeTool, isMobileMenuOpen]);
-
-  const handleResetAll = () => {
-    resetAllTools();
-    toast.success("All tools have been reset to their initial state.");
-  };
 
   // Add custom highlight.js styles for GitHub theme
   useEffect(() => {
@@ -90,10 +80,10 @@ const MainLayout = ({ children, tools, activeTool, onToolSelect }: MainLayoutPro
       {/* Sidebar */}
       <aside
         className={cn(
-          "w-full md:w-64 bg-gray-800 text-white md:min-h-screen z-10 transition-all duration-300 flex flex-col",
+          "w-full md:w-64 bg-gray-800 text-white md:min-h-screen z-10 transition-all duration-300",
           isMobileMenuOpen 
-            ? "fixed inset-0" 
-            : "hidden md:flex"
+            ? "fixed inset-0 flex flex-col" 
+            : "hidden md:flex md:flex-col"
         )}
       >
         <div className="p-4 text-center">
@@ -120,18 +110,6 @@ const MainLayout = ({ children, tools, activeTool, onToolSelect }: MainLayoutPro
             ))}
           </ul>
         </nav>
-        
-        {/* Reset All Tools Button */}
-        <div className="p-4 mt-auto border-t border-gray-700">
-          <Button 
-            onClick={handleResetAll} 
-            variant="outline" 
-            className="w-full flex items-center justify-center gap-2 bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
-          >
-            <RotateCcw size={16} />
-            Reset All Tools
-          </Button>
-        </div>
       </aside>
 
       {/* Main content */}

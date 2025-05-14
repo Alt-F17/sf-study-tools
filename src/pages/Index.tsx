@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import MainLayout from "@/components/layouts/MainLayout";
@@ -11,6 +10,7 @@ import PlaceholderTool from "@/components/tools/PlaceholderTool";
 import SpotBug from "@/components/tools/SpotBug";
 import StepByStepAnimator from "@/components/tools/StepByStepAnimator";
 import StackOrQueue from "@/components/tools/StackOrQueue";
+import FileIOSimulation from "@/components/tools/FileIOSimulation";
 import { useToolsStore } from "@/store/toolsStore";
 
 const Index = () => {
@@ -24,7 +24,7 @@ const Index = () => {
     { id: "pandas-playground", name: "Pandas and Matplotlib", component: PlaceholderTool },
     { id: "spot-bug", name: "Spot the Bug", component: SpotBug },
     { id: "list-pattern", name: "Final Boss Problems", component: PlaceholderTool },
-    { id: "file-io", name: "File I/O Simulation", component: PlaceholderTool },
+    { id: "file-io", name: "File I/O Simulation", component: FileIOSimulation },
     { id: "oop-diagram", name: "OOP Diagram Builder", component: PlaceholderTool },
     { id: "sort-animator", name: "Step-by-Step Animator", component: StepByStepAnimator },
     { id: "complexity-calc", name: "Complexity Calculator", component: PlaceholderTool },

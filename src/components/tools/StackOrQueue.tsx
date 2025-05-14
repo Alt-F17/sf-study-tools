@@ -2,10 +2,8 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
 
 // Define the data structures
 interface DataItem {
@@ -18,9 +16,6 @@ const StackOrQueue: React.FC = () => {
   const [queueData, setQueueData] = useState<DataItem[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [nextId, setNextId] = useState<number>(1);
-  const [challengeActive, setChallengeActive] = useState<boolean>(false);
-  const [challengeSolved, setChallengeSolved] = useState<boolean>(false);
-  const [targetStack, setTargetStack] = useState<DataItem[]>([]);
 
   // Stack operations
   const pushToStack = () => {
@@ -28,10 +23,8 @@ const StackOrQueue: React.FC = () => {
     
     const newItem = { value: inputValue, id: nextId };
     setStackData([...stackData, newItem]);
-    setInputValue('');
     setNextId(nextId + 1);
-    
-    if (challengeActive) checkChallenge([...stackData, newItem], queueData);
+    // Input value is now persistent
   };
 
   const popFromStack = () => {
@@ -40,8 +33,6 @@ const StackOrQueue: React.FC = () => {
     const newStack = [...stackData];
     newStack.pop();
     setStackData(newStack);
-    
-    if (challengeActive) checkChallenge(newStack, queueData);
   };
 
   // Queue operations
@@ -50,10 +41,8 @@ const StackOrQueue: React.FC = () => {
     
     const newItem = { value: inputValue, id: nextId };
     setQueueData([...queueData, newItem]);
-    setInputValue('');
     setNextId(nextId + 1);
-    
-    if (challengeActive) checkChallenge(stackData, [...queueData, newItem]);
+    // Input value is now persistent
   };
 
   const dequeue = () => {
@@ -62,8 +51,6 @@ const StackOrQueue: React.FC = () => {
     const newQueue = [...queueData];
     newQueue.shift();
     setQueueData(newQueue);
-    
-    if (challengeActive) checkChallenge(stackData, newQueue);
   };
 
   // Reset both structures
@@ -71,44 +58,6 @@ const StackOrQueue: React.FC = () => {
     setStackData([]);
     setQueueData([]);
     setInputValue('');
-    setChallengeActive(false);
-    setChallengeSolved(false);
-  };
-
-  // Start challenge
-  const startChallenge = () => {
-    // Create a random target stack of 3-5 elements
-    const size = Math.floor(Math.random() * 3) + 3; // 3 to 5 elements
-    const target: DataItem[] = [];
-    
-    for (let i = 0; i < size; i++) {
-      const value = String.fromCharCode(65 + Math.floor(Math.random() * 26)); // Random letter A-Z
-      target.push({ value, id: i + 100 });
-    }
-    
-    setTargetStack(target);
-    setStackData([]);
-    setQueueData([]);
-    setChallengeActive(true);
-    setChallengeSolved(false);
-    
-    toast.info("Challenge started! Make both data structures match the target pattern.");
-  };
-
-  // Check if challenge is solved
-  const checkChallenge = (stack: DataItem[], queue: DataItem[]) => {
-    if (!challengeActive) return;
-    
-    // Check if both stack and queue have the same values in the same order as target
-    if (stack.length !== targetStack.length || queue.length !== targetStack.length) return;
-    
-    const stackMatch = stack.every((item, index) => item.value === targetStack[index].value);
-    const queueMatch = queue.every((item, index) => item.value === targetStack[index].value);
-    
-    if (stackMatch && queueMatch && !challengeSolved) {
-      setChallengeSolved(true);
-      toast.success("Challenge completed! You've made both structures match the target.");
-    }
   };
 
   return (
@@ -130,48 +79,8 @@ const StackOrQueue: React.FC = () => {
               maxLength={10}
             />
             <Button onClick={resetAll} variant="outline">Reset All</Button>
-            {!challengeActive ? (
-              <Button onClick={startChallenge} className="bg-purple-600 hover:bg-purple-700">Start Challenge</Button>
-            ) : (
-              <Button 
-                onClick={startChallenge} 
-                className={`bg-purple-600 hover:bg-purple-700 ${challengeSolved ? 'animate-pulse' : ''}`}
-              >
-                New Challenge
-              </Button>
-            )}
           </div>
         </div>
-        
-        {challengeActive && (
-          <Card className="mb-6 border-2 border-purple-400">
-            <CardHeader className="bg-purple-50">
-              <CardTitle className="text-center">Challenge</CardTitle>
-              <CardDescription className="text-center font-medium">
-                Make both the stack and queue contain these elements in this order:
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center py-4">
-              <div className="flex gap-2">
-                {targetStack.map((item, index) => (
-                  <div 
-                    key={item.id} 
-                    className="bg-purple-100 border border-purple-300 rounded px-4 py-2 font-mono"
-                  >
-                    {item.value}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-            <CardFooter className="bg-purple-50 justify-center">
-              {challengeSolved ? (
-                <span className="text-green-600 font-bold">Challenge completed! 🎉</span>
-              ) : (
-                <span className="text-gray-600">Operations needed for both structures</span>
-              )}
-            </CardFooter>
-          </Card>
-        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Stack Side */}
@@ -183,14 +92,10 @@ const StackOrQueue: React.FC = () => {
             <CardContent className="pt-6">
               <div className="bg-gray-50 p-4 rounded-md mb-4 h-64 overflow-y-auto">
                 <div className="flex flex-col-reverse">
-                  {stackData.map((item, index) => (
+                  {stackData.map((item) => (
                     <div 
                       key={item.id}
-                      className={`bg-blue-100 border border-blue-300 mb-2 p-2 rounded text-center ${
-                        challengeActive && index < targetStack.length && item.value === targetStack[index].value 
-                          ? "border-green-500 border-2" 
-                          : ""
-                      }`}
+                      className="bg-blue-100 border border-blue-300 mb-2 p-2 rounded text-center"
                     >
                       {item.value}
                     </div>
@@ -226,11 +131,7 @@ const StackOrQueue: React.FC = () => {
                   {queueData.map((item, index) => (
                     <div 
                       key={item.id} 
-                      className={`bg-green-100 border border-green-300 mb-2 p-2 rounded text-center flex justify-between items-center ${
-                        challengeActive && index < targetStack.length && item.value === targetStack[index].value 
-                          ? "border-green-500 border-2" 
-                          : ""
-                      }`}
+                      className="bg-green-100 border border-green-300 mb-2 p-2 rounded text-center flex justify-between items-center"
                     >
                       <span className="text-xs text-gray-500">{index === 0 ? 'front' : ''}</span>
                       <span>{item.value}</span>

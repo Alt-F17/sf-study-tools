@@ -104,9 +104,9 @@ const StackOrQueue: React.FC = () => {
               </div>
               
               <div className="font-mono bg-gray-900 text-gray-50 p-4 rounded text-sm mb-4">
-                <p><span className="text-yellow-400">// Stack operations</span></p>
-                <p><span className="text-blue-400">stack</span>.<span className="text-green-400">push</span>(<span className="text-orange-400">element</span>); <span className="text-gray-500">// Add to top</span></p>
-                <p><span className="text-purple-400">element</span> = <span className="text-blue-400">stack</span>.<span className="text-green-400">pop</span>(); <span className="text-gray-500">// Remove from top</span></p>
+                <p><span className="text-green-600"># Stack Operations</span></p>
+                <p><span className="text-blue-400">stack</span>.<span className="text-yellow-400">append</span>(<span className="text-blue-200">element</span>); <span className="text-green-600"># Add to top</span></p>
+                <p><span className="text-blue-200">element</span> = <span className="text-blue-400">stack</span>.<span className="text-yellow-400">pop</span>(); <span className="text-green-600"># Remove from top</span></p>
               </div>
             </CardContent>
             <CardFooter className="flex justify-between bg-gray-50">
@@ -142,9 +142,9 @@ const StackOrQueue: React.FC = () => {
               </div>
               
               <div className="font-mono bg-gray-900 text-gray-50 p-4 rounded text-sm mb-4">
-                <p><span className="text-yellow-400">// Queue operations</span></p>
-                <p><span className="text-blue-400">queue</span>.<span className="text-green-400">enqueue</span>(<span className="text-orange-400">element</span>); <span className="text-gray-500">// Add to back</span></p>
-                <p><span className="text-purple-400">element</span> = <span className="text-blue-400">queue</span>.<span className="text-green-400">dequeue</span>(); <span className="text-gray-500">// Remove from front</span></p>
+                <p><span className="text-green-600"># Queue operations</span></p>
+                <p><span className="text-blue-400">queue</span>.<span className="text-yellow-400">append</span>(<span className="text-blue-200">element</span>); <span className="text-green-600"># Add to back</span></p>
+                <p><span className="text-blue-200">element</span> = <span className="text-blue-400">queue</span>.<span className="text-yellow-400">popleft</span>(); <span className="text-green-600"># Remove from front</span></p>
               </div>
             </CardContent>
             <CardFooter className="flex justify-between bg-gray-50">

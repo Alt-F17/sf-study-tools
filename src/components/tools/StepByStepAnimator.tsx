@@ -1,13 +1,14 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/theme-github_light_default";
+import "ace-builds/src-noconflict/mode-python";
 import { Code } from "lucide-react";
 
 const StepByStepAnimator: React.FC = () => {
   const [code, setCode] = useState<string>(
-`# Type your Python code here
+`# Type or paste your Python code here
 x = 5
 y = 10
 z = x + y
@@ -31,23 +32,28 @@ print(z)`
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="bg-gray-900 text-white p-1 rounded-md">
-            <div className="flex items-center justify-between p-2 border-b border-gray-700 mb-2">
-              <div className="text-sm font-mono">main.py</div>
-              <Button 
-                variant="outline" 
-                size="sm" 
+          <div className="bg-gray-50 text-white p-1 rounded-md">
+            <div className="flex items-center justify-between p-2 border-b border-gray-300 mb-2">
+              <div className="text-sm font-mono text-gray-700">main.py</div>
+              <Button
+                variant="outline"
+                size="sm"
                 className="bg-blue-600 hover:bg-blue-700 text-white"
                 onClick={generatePythonTutorUrl}
               >
                 Visualize Code
               </Button>
             </div>
-            <Textarea
+            <AceEditor
+              mode="python"
+              theme="github_light_default"
+              name="step-by-step-editor"
+              onChange={setCode}
               value={code}
-              onChange={(e) => setCode(e.target.value)}
-              className="min-h-[300px] w-full bg-gray-900 border-none text-white font-mono text-sm resize-y p-2 focus-visible:ring-0 focus-visible:ring-offset-0"
-              placeholder="# Type your Python code here"
+              fontSize={14}
+              width="100%"
+              showPrintMargin={false}
+              setOptions={{ useWorker: false, maxLines: Infinity }}
             />
           </div>
           
@@ -56,12 +62,13 @@ print(z)`
               <div className="text-xl font-semibold mb-2">Visualization</div>
               <div className="border border-gray-300 rounded-md overflow-hidden">
                 <iframe
+                  key={pythonTutorUrl}
                   src={pythonTutorUrl}
                   width="100%"
                   height="500"
                   frameBorder="0"
                   title="Python Tutor Visualization"
-                ></iframe>
+                />
               </div>
             </div>
           )}

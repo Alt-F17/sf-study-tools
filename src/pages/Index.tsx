@@ -13,6 +13,8 @@ import StackOrQueue from "@/components/tools/StackOrQueue";
 import FileIOSimulation from "@/components/tools/FileIOSimulation";
 import SuperHardProblems from "@/components/tools/SuperHardProblems";
 import { useToolsStore } from "@/store/toolsStore";
+import PandasPlayground from "@/components/tools/PandasPlayground";
+import PythonMindMap from "@/components/tools/PythonMindMap";
 
 const Index = () => {
   const { activeTool, setActiveTool } = useToolsStore();
@@ -22,7 +24,7 @@ const Index = () => {
     { id: "flashcards", name: "SF2 Flashcards", component: Flashcards },
     { id: "concept-test", name: "SF2 ConcepTests", component: ConceptTests },
     { id: "stack-queue", name: "Stack or Queue?", component: StackOrQueue },
-    { id: "pandas-playground", name: "Pandas and Matplotlib", component: PlaceholderTool },
+    { id: "pandas-playground", name: "Pandas and Matplotlib", component: PandasPlayground },
     { id: "spot-bug", name: "Spot the Bug", component: SpotBug },
     { id: "list-pattern", name: "Final Boss Problems", component: SuperHardProblems },
     { id: "file-io", name: "File I/O Simulation", component: FileIOSimulation },
@@ -30,7 +32,7 @@ const Index = () => {
     { id: "sort-animator", name: "Step-by-Step Animator", component: StepByStepAnimator },
     { id: "complexity-calc", name: "Complexity Calculator", component: PlaceholderTool },
     { id: "py-terminal", name: "Python Terminal Emulator", component: PythonTerminal },
-    { id: "concept-map", name: "Python Concept Map", component: PlaceholderTool },
+    { id: "concept-map", name: "Python Concept Map", component: PythonMindMap },
     { id: "additional-resources", name: "A few more Tools...", component: AdditionalResources },
   ];
 

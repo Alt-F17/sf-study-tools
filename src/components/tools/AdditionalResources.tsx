@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -76,6 +75,49 @@ const AdditionalResources: React.FC = () => {
               width="100%" 
               height="100%" 
               style={{ border: "none" }} 
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* New resource: VIM Hero Intro to Modes */}
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <a href="https://www.vim-hero.com/lessons/intro-to-modes" className="text-blue-600 hover:underline">
+              VIM Hero: Intro to Modes
+            </a>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="w-full border-2 border-gray-300 rounded-lg overflow-hidden h-[600px]">
+            <iframe
+              src="https://www.vim-hero.com/lessons/intro-to-modes"
+              width="100%"
+              height="100%"
+              style={{ border: "none" }}
+            />
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <a
+              href="https://cs.calvin.edu/courses/cs/108/kvlinden/resources/pogil/Activities%20for%20CS1%20in%20Python%20-%20Student.pdf"
+              className="text-blue-600 hover:underline"
+            >
+              CS1 POGIL Activities PDF
+            </a>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="w-full border-2 border-gray-300 rounded-lg overflow-hidden h-[600px]">
+            <iframe
+              src="https://cs.calvin.edu/courses/cs/108/kvlinden/resources/pogil/Activities%20for%20CS1%20in%20Python%20-%20Student.pdf"
+              width="100%"
+              height="100%"
+              style={{ border: "none" }}
             />
           </div>
         </CardContent>

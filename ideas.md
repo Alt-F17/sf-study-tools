@@ -13,7 +13,7 @@ DONE: [ ] Populate
 
 
 - [X] Stack VS Queue
-DONE
+DONE: COMPLETELY DONE 
 
 
 - [ ] Pandas DataFrame playground with small datasets
@@ -26,10 +26,8 @@ Challenge to graph the grades for each student using Matplotlib.
 DONE: [ ] Populate
 
 
-- [ ] Super Duper Hard Python Problems
-Python problems that are too hard for the average EXAM Prep.
-Designed to require a lot of thought and to tackle multiple concepts at once.
-Implement a test suite to test the code.
+- [X] Super Duper Hard Python Problems
+DONE: [ ] Populate
 
 
 - [ ] File I/O simulation sandbox
@@ -49,10 +47,8 @@ Create a class diagram of the animal hierarchy.
 Create animals in subclasses and show the relationships between them.
 
 
-- [ ] Step-by-step animator
-Explanation for each step of the algorithm.
-For a typed snippet of code, go line by line and calculate the space and time complexity of each line.
-Preset Algorithms to include: Selection sort, Insertion sort, Merge sort, Quick sort || Fibonacci, Factorial, Binary search.
+- [X] Step-by-step animator
+DONE: [ ] Populate: Preset Algorithms to include: Selection sort, Insertion sort, Merge sort, Quick sort || Fibonacci, Factorial, Binary search.
 
 - [ ] Complexity calculator
 Calculate the time and space complexity of a given algorithm.
@@ -62,17 +58,15 @@ Final verdict of the complexity of the algorithm with a breakdown explination.
 
 
 - [X] Python terminal emulator for practice
-DONE
+DONE: COMPLETELY DONE
 
 
-- [ ] Python concept map navigator
-Floating concept map of Python concepts and their relationships.
-Drag around the map to see how concepts are related.
-Short description of each concept when hovered.
+- [X] Python concept map navigator
+DONE: COMPLETELY DONE
 
 
 - [X] Other / More Ressources
-DONE
+DONE: [ ] Populate: resources from those posted in the #resources channel on Discord.
 
 
 ---

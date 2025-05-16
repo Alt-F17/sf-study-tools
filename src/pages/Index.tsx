@@ -11,6 +11,7 @@ import SpotBug from "@/components/tools/SpotBug";
 import StepByStepAnimator from "@/components/tools/StepByStepAnimator";
 import StackOrQueue from "@/components/tools/StackOrQueue";
 import FileIOSimulation from "@/components/tools/FileIOSimulation";
+import SuperHardProblems from "@/components/tools/SuperHardProblems";
 import { useToolsStore } from "@/store/toolsStore";
 
 const Index = () => {
@@ -23,7 +24,7 @@ const Index = () => {
     { id: "stack-queue", name: "Stack or Queue?", component: StackOrQueue },
     { id: "pandas-playground", name: "Pandas and Matplotlib", component: PlaceholderTool },
     { id: "spot-bug", name: "Spot the Bug", component: SpotBug },
-    { id: "list-pattern", name: "Final Boss Problems", component: PlaceholderTool },
+    { id: "list-pattern", name: "Final Boss Problems", component: SuperHardProblems },
     { id: "file-io", name: "File I/O Simulation", component: FileIOSimulation },
     { id: "oop-diagram", name: "OOP Diagram Builder", component: PlaceholderTool },
     { id: "sort-animator", name: "Step-by-Step Animator", component: StepByStepAnimator },

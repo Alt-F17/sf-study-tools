@@ -1,5 +1,7 @@
 # Ideas for SF2 - Study Tools (2025)
 
+# EVERYTHING IN A SINGLE FILE!!! (end me... please...)
+
 - [X] Word Jumble
 DONE: [ ] Populate
 
@@ -12,8 +14,10 @@ DONE: [ ] Populate
 DONE: [ ] Populate
 
 
-- [X] Stack VS Queue
-DONE
+- [ ] Stack VS Queue
+Split screen into two sections, one for stack and one for queue.
+Code snippets for each data structure.
+Challenge to make both stacks contain the same elements in the same order.
 
 
 - [ ] Pandas DataFrame playground with small datasets
@@ -33,25 +37,22 @@ Implement a test suite to test the code.
 
 
 - [ ] File I/O simulation sandbox
-Split into 3 parts:
 Side bar containing a list of files and their types.
-Code editor to pass python scripts.
-Section showing the contents of the active file and the position of the pointer.
 Challenge to read a file and print the contents to the console.
 Challenge to take in the contents of a file and write them to a new file with a different name and format.
 Challenge to take in the contents of a file and write them to a JSON file.
-Validate the results for each challenge and show a success message.
 
 
 - [ ] OOP class hierarchy diagram builder
-Use animal hierarchy as an example.
+Use animal heirarchy as an example.
 Create a class diagram of the animal hierarchy.
 Create animals in subclasses and show the relationships between them.
 
 
+
 - [ ] Step-by-step animator
-Explanation for each step of the algorithm.
-For a typed snippet of code, go line by line and calculate the space and time complexity of each line.
+Explination for each step of the algorithm.
+For a typed snipper of code, go line by line and calculate the space and time complexity of each line.
 Preset Algorithms to include: Selection sort, Insertion sort, Merge sort, Quick sort || Fibonacci, Factorial, Binary search.
 
 - [ ] Complexity calculator

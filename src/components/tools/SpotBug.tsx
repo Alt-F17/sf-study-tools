@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useToolsStore } from "@/store/toolsStore";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import spotBugProblemsData from '@/data/spotBugProblems.json';
 
 interface BugProblem {
   code: string;
@@ -16,24 +17,8 @@ const SpotBug: React.FC = () => {
   const { spotBugState, updateSpotBugState, initSpotBug } = useToolsStore();
   const { deckOrder, currentIndex, correctCount, wrongCount, answered } = spotBugState;
   
-  const [bugProblems] = useState<BugProblem[]>([
-    {
-      code: `def calculate_average(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total / len(numbers)\n\nresult = calculate_average([])\nprint(result)`,
-      bugLine: 5,
-      bugDescription: "ZeroDivisionError: Division by zero occurs if an empty list is passed, as len(numbers) will be 0."
-    },
-    {
-      code: `def find_max(numbers):\n    if not numbers:\n        return None\n    max_value = numbers[0]\n    for num in numbers[1:]:\n        if num > max_value:\n            max_value = num\n    return max_value\n\nmy_list = [5, 2, 9, 1, 7]\nresult = find_max(my_list)\nprint("Maximum value:", result)`,
-      bugLine: 4, 
-      bugDescription: "This code is actually correct! The 'bug' is a trick question to test attention to detail. Line 4 correctly initializes max_value."
-    },
-    {
-      code: `def remove_duplicates(items):\n    result = []\n    for item in items:\n        if item not in result:\n            result.append(item)\n    return results\n\nmy_list = [1, 2, 2, 3, 4, 4, 5]\nunique_items = remove_duplicates(my_list)\nprint(unique_items)`,
-      bugLine: 6,
-      bugDescription: "NameError: The variable 'results' is referenced before assignment (typo, should be 'result')."
-    }
-  ]);
-
+  // Remove inline state for bugProblems
+  const bugProblems: BugProblem[] = spotBugProblemsData as BugProblem[];
   const [selectedLine, setSelectedLine] = useState<number>(1); // 1-indexed
   const [lineCount, setLineCount] = useState<number>(1);
   const [highlightedLines, setHighlightedLines] = useState<string[]>([]);

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useToolsStore } from "@/store/toolsStore";
+import conceptTestsData from '@/data/conceptTests.json';
 
 interface ConceptTest {
   code: string;
@@ -15,18 +16,7 @@ const ConceptTests: React.FC = () => {
   const { conceptTestsState, updateConceptTestsState, initConceptTests } = useToolsStore();
   const { deckOrder, currentIndex, correctCount, wrongCount, answered } = conceptTestsState;
   
-  const [conceptTests] = useState<ConceptTest[]>([
-    {
-      code: `def foo(x):\n    return x * x\n\nprint(foo(5))`,
-      choices: ["5", "10", "25", "Error"],
-      correct: 2
-    },
-    {
-      code: `a = [1,2,3]\nb = a\nb.append(4)\nprint(a)`,
-      choices: ["[1,2,3]", "[1,2,3,4]", "[4]", "Error"],
-      correct: 1
-    }
-  ]);
+  const conceptTests: ConceptTest[] = conceptTestsData as ConceptTest[];
 
   const [processedCodeLines, setProcessedCodeLines] = useState<string[]>([]);
   const [isCodeHighlighted, setIsCodeHighlighted] = useState(false);
@@ -112,7 +102,7 @@ const ConceptTests: React.FC = () => {
         <CardTitle>SF2 ConcepTests</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="mb-4">All of Louisa's ConceptTests all in one place! Can you solve them all?</p>
+        <p className="mb-4">All of Louisa's ConcepTests all in one place! Can you solve them all?</p>
         
         {currentTest && deckOrder.length > 0 ? (
           <>

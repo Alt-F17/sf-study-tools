@@ -1,0 +1,14 @@
+[
+  {
+    "id": "c1",
+    "title": "Read File",
+    "initialCode": "with open(\"sample.txt\",\"r\") as f:\n    print(f.read())",
+    "verify": null
+  },
+  {
+    "id": "c2",
+    "title": "Copy CSV",
+    "initialCode": "with open(\"data.csv\",\"r\") as r:\n    data=r.read()\nwith open(\"copy.csv\",\"w\") as w:\n    w.write(data)",
+    "verify": null
+  }
+]

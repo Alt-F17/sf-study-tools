@@ -1,8 +1,11 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import additionalResources from '@/data/additionalResources.json';
 
 const AdditionalResources: React.FC = () => {
+  // Cast imported JSON to typed array
+  const resources = additionalResources as { title: string; url: string }[];
   return (
     <div className="space-y-8">
       <Card>
@@ -122,6 +125,29 @@ const AdditionalResources: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Dynamic resource cards from JSON */}
+      {resources.map((res, idx) => (
+        <Card key={idx}>
+          <CardHeader>
+            <CardTitle>
+              <a href={res.url} className="text-blue-600 hover:underline">
+                {res.title}
+              </a>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="w-full border-2 border-gray-300 rounded-lg overflow-hidden h-[600px]">
+              <iframe
+                src={res.url}
+                width="100%"
+                height="100%"
+                style={{ border: "none" }}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
 
       <Card>
         <CardHeader>

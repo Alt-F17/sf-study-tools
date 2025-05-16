@@ -1,112 +1,143 @@
-import React, { useState, useEffect, useRef } from "react";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/theme-github";
-import "ace-builds/src-noconflict/mode-python";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import React, { useState, useEffect } from 'react';
+import AceEditor from 'react-ace';
+import 'ace-builds/src-noconflict/theme-github_light_default';
+import 'ace-builds/src-noconflict/mode-python';
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
-const initialCode = `# Simple grades dataset
-grades = {'Alice': 85, 'Bob': 92, 'Charlie': 78, 'Diana': 88}
-print("Original mapping (Student -> Grade):")
-print(grades)
+const initialCode = `# Read grades.csv from Pyodide filesystem
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load DataFrame
+print('DataFrame loaded from grades.csv:')
+df = pd.read_csv('grades.csv')
+print(df)
 
 # Challenge 1: swap keys and values
-swapped = {v:k for k,v in grades.items()}
-print("\nSwapped mapping (Grade -> Student):")
+swapped = dict(zip(df['Grade'], df['Student']))
+print('\\nSwapped mapping (Grade -> Student):')
 print(swapped)
 
 # Challenge 2: plot grades
-import matplotlib.pyplot as plt
-import pandas as pd
-df = pd.DataFrame(list(grades.items()), columns=['Student','Grade'])
 df.plot(kind='bar', x='Student', y='Grade')
-plt.title("Class Grades")
+plt.title('Class Grades')
 `;
 
 const PandasPlayground: React.FC = () => {
   const [pyodide, setPyodide] = useState<any>(null);
-  const editorRef = useRef<any>(null);
+  const [code, setCode] = useState<string>(initialCode);
   const [running, setRunning] = useState(false);
+  const [output, setOutput] = useState<string>('');
+  const [plotSrc, setPlotSrc] = useState<string>('');
 
   useEffect(() => {
-    (async () => {
-      const py = await (window as any).loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.23.4/full/" });
-      await py.loadPackage(["pandas", "matplotlib"]);
+    const initPy = async () => {
+      // Load Pyodide and required packages
+      let py;
+      if (!(window as any).loadPyodide) {
+        await new Promise<void>((resolve) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js';
+          script.onload = () => resolve();
+          document.body.appendChild(script);
+        });
+      }
+      py = await (window as any).loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/' });
+      await py.loadPackage(['pandas','matplotlib']);
+      // Write grades.csv into Pyodide FS
+      try {
+        const res = await fetch('/grades.csv');
+        const csvText = await res.text();
+        py.FS.writeFile('grades.csv', csvText);
+      } catch {
+        /* ignore fetch errors */
+      }
       setPyodide(py);
-    })();
+    };
+    initPy();
   }, []);
 
   const runCode = async () => {
     if (!pyodide) return;
     setRunning(true);
-    const outEl = document.getElementById("pandas-output");
-    const imgEl = document.getElementById("pandas-plot") as HTMLImageElement;
-    if (outEl) outEl.textContent = "";
-    if (imgEl) imgEl.src = "";
-
-    const userCode = editorRef.current.editor.getValue();
-    const wrapped = `
-import sys
-from io import StringIO, BytesIO
-from js import document
-import pandas as pd
-import matplotlib
-matplotlib.use('AGG')
-import matplotlib.pyplot as plt
-import base64
-
-buf = StringIO()
-sys.stdout = buf
-
-${userCode}
-
-sys.stdout = sys.__stdout__
-document.getElementById("pandas-output").textContent = buf.getvalue()
-
-img_buf = BytesIO()
-plt.savefig(img_buf, format='png')
-img_buf.seek(0)
-data = base64.b64encode(img_buf.read()).decode('ascii')
-document.getElementById("pandas-plot").src = 'data:image/png;base64,' + data
-`;
+    setOutput('');
+    setPlotSrc('');
+    const harnessStart = [
+      'import sys, json',
+      'from io import StringIO, BytesIO',
+      'import pandas as pd',
+      'import matplotlib',
+      'matplotlib.use("AGG")',
+      'import matplotlib.pyplot as plt',
+      'buf = StringIO()',
+      'sys.stdout = buf',
+    ];
+    const codeLines = code.split(/\r?\n/);
+    const harnessEnd = [
+      'sys.stdout = sys.__stdout__',
+      'text = buf.getvalue()',
+      'buf2 = BytesIO()',
+      'plt.tight_layout()',
+      'plt.savefig(buf2, format="png")',
+      'buf2.seek(0)',
+      'import base64',
+      'img = base64.b64encode(buf2.read()).decode("ascii")',
+      'json.dumps({"output": text, "plot": img})',
+    ];
+    const wrapped = [...harnessStart, ...codeLines, ...harnessEnd].join('\n');
     try {
-      await pyodide.runPythonAsync(wrapped);
-    } catch (e: any) {
-      if (outEl) outEl.textContent = String(e);
+      const result = await pyodide.runPythonAsync(wrapped);
+      const { output: out, plot: img } = JSON.parse(result as string);
+      setOutput(out);
+      if (img) setPlotSrc('data:image/png;base64,' + img);
+    } catch (err: any) {
+      setOutput(err.message || String(err));
+    } finally {
+      setRunning(false);
     }
-    setRunning(false);
   };
 
   return (
     <div className="flex flex-col gap-4 max-w-4xl mx-auto w-full">
       <Card>
-        <CardHeader>
-          <CardTitle>Pandas & Matplotlib Playground</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle>Pandas & Matplotlib Playground</CardTitle></CardHeader>
         <CardContent>
+          {/* Preview of CSV file */}
+          <div className="mb-4">
+            <div className="text-sm font-semibold mb-1">grades.csv (as DataFrame)</div>
+            <pre className="bg-gray-50 p-2 rounded text-sm whitespace-pre-wrap">
+            {`   `}<u>{`Student`}</u>{`       `}<u>{`Grade`}</u>{`
+0  Alice         85
+1  Bob           92
+2  Charlie       78
+3  Diana         88`}
+            </pre>
+          </div>
           <AceEditor
             mode="python"
-            theme="github"
+            theme="github_light_default"
             name="pandas-playground-editor"
-            onLoad={(editor) => (editorRef.current = editor)}
-            value={initialCode}
+            onChange={setCode}
+            value={code}
             fontSize={14}
             width="100%"
             height="250px"
-            showPrintMargin={false}
-            setOptions={{ useWorker: false }}
+            setOptions={{ useWorker: false, maxLines: Infinity }}
           />
           <Button className="mt-2" onClick={runCode} disabled={!pyodide || running}>
-            {running ? "Running..." : "Run Code"}
+            {running ? 'Running...' : 'Run Code'}
           </Button>
           <div className="mt-4">
             <div className="text-sm font-semibold mb-1">Output:</div>
-            <pre id="pandas-output" className="bg-gray-100 p-2 rounded text-sm whitespace-pre-wrap"></pre>
+            <pre className="bg-gray-100 p-2 rounded text-sm whitespace-pre-wrap">{output}</pre>
           </div>
-          <div className="mt-4">
-            <div className="text-sm font-semibold mb-1">Plot:</div>
-            <img id="pandas-plot" alt="Matplotlib plot" className="w-full border rounded" />
-          </div>
+          {plotSrc && (
+            <div className="mt-4">
+              <div className="text-sm font-semibold mb-1">Plot:</div>
+              <img src={plotSrc} alt="Matplotlib plot" className="w-full border rounded" />
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

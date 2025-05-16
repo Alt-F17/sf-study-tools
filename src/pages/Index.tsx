@@ -15,6 +15,8 @@ import SuperHardProblems from "@/components/tools/SuperHardProblems";
 import { useToolsStore } from "@/store/toolsStore";
 import PandasPlayground from "@/components/tools/PandasPlayground";
 import PythonMindMap from "@/components/tools/PythonMindMap";
+import SF1Tools from "@/components/tools/SF1Tools";
+import ComplexityCalc from "@/components/tools/ComplexityCalc";
 
 const Index = () => {
   const { activeTool, setActiveTool } = useToolsStore();
@@ -30,10 +32,11 @@ const Index = () => {
     { id: "file-io", name: "File I/O Simulation", component: FileIOSimulation },
     { id: "oop-diagram", name: "OOP Diagram Builder", component: PlaceholderTool },
     { id: "sort-animator", name: "Step-by-Step Animator", component: StepByStepAnimator },
-    { id: "complexity-calc", name: "Complexity Calculator", component: PlaceholderTool },
+    { id: "complexity-calc", name: "Complexity Calculator", component: ComplexityCalc },
     { id: "py-terminal", name: "Python Terminal Emulator", component: PythonTerminal },
     { id: "concept-map", name: "Python Concept Map", component: PythonMindMap },
     { id: "additional-resources", name: "A few more Tools...", component: AdditionalResources },
+    { id: "sf1-tools", name: "SF1 Study Tools", component: SF1Tools },
   ];
 
   // Find the selected tool

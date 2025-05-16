@@ -16,11 +16,8 @@ DONE: [ ] Populate
 DONE: COMPLETELY DONE 
 
 
-- [ ] Pandas DataFrame playground with small datasets
-Simple Dataset of simulated grades for Louisa's class.
-Challenge to go from X = assigned grades, Y = Student names, to opposite using Pandas.
-Challenge to graph the grades for each student using Matplotlib. 
-
+- [X] Pandas DataFrame playground with small datasets
+DONE: [ ] Populate
 
 - [X] "Spot the Bug" challenges with common Python errors
 DONE: [ ] Populate
@@ -31,6 +28,7 @@ DONE: [ ] Populate
 
 
 - [ ] File I/O simulation sandbox
+FIX: [ ]
 Split into 3 parts:
 Side bar containing a list of files and their types.
 Code editor to pass python scripts.
@@ -66,7 +64,7 @@ DONE: COMPLETELY DONE
 
 
 - [X] Other / More Ressources
-DONE: [ ] Populate: resources from those posted in the #resources channel on Discord.
+DONE: [X] Populate: Done for now...
 
 
 ---

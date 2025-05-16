@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useToolsStore } from "@/store/toolsStore";
+import wordsData from '@/data/wordJumbleWords.json';
 
 interface JumbleWord {
   word: string;
@@ -16,28 +16,7 @@ const WordJumble: React.FC = () => {
   const { wordJumbleState, updateWordJumbleState, initWordJumble } = useToolsStore();
   const { deckOrder, currentIndex, mistakes } = wordJumbleState;
   
-  const [words] = useState<JumbleWord[]>([
-    { word: "function", hint: "Defines a reusable block of code" },
-    { word: "variable", hint: "Stores a value" },
-    { word: "integer", hint: "A whole number data type" },
-    { word: "string", hint: "Sequence of characters" },
-    { word: "boolean", hint: "True or False value" },
-    { word: "list", hint: "Ordered, mutable collection" },
-    { word: "dictionary", hint: "Key-value mapping" },
-    { word: "tuple", hint: "Ordered, immutable collection" },
-    { word: "class", hint: "Defines a user-defined type" },
-    { word: "object", hint: "Instance of a class" },
-    { word: "loop", hint: "Repeats code block" },
-    { word: "while", hint: "Loop that runs while a condition holds" },
-    { word: "return", hint: "Gives back a value from a function" },
-    { word: "import", hint: "Brings in modules or objects" },
-    { word: "module", hint: "File containing Python code" },
-    { word: "index", hint: "Position number in a sequence" },
-    { word: "slice", hint: "Extracts a sub-part of a sequence" },
-    { word: "append", hint: "Adds item to end of list" },
-    { word: "method", hint: "Function associated with an object" },
-    { word: "attribute", hint: "Property of an object" }
-  ]);
+  const words: JumbleWord[] = wordsData as JumbleWord[];
 
   const [guess, setGuess] = useState("");
   const [scrambledWord, setScrambledWord] = useState("");

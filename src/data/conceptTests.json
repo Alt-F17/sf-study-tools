@@ -1,0 +1,12 @@
+[
+  {
+    "code": "def foo(x):\n    return x * x\n\nprint(foo(5))",
+    "choices": ["5", "10", "25", "Error"],
+    "correct": 2
+  },
+  {
+    "code": "a = [1,2,3]\nb = a\nb.append(4)\nprint(a)",
+    "choices": ["[1,2,3]", "[1,2,3,4]", "[4]", "Error"],
+    "correct": 1
+  }
+]

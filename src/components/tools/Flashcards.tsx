@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useToolsStore } from "@/store/toolsStore";
+import flashcardsData from '@/data/flashcards.json';
 
 interface Flashcard {
   front: string;
@@ -14,18 +14,8 @@ const Flashcards: React.FC = () => {
   const { flashcardsState, updateFlashcardsState, initFlashcards } = useToolsStore();
   const { deckOrder, currentIndex, knownIndices, isFlipped } = flashcardsState;
 
-  const [flashcards] = useState<Flashcard[]>([
-    { front: "What does 'def' keyword do?", back: "Defines a function." },
-    { front: "What is '==' used for?", back: "Checks for equality of value." },
-    { front: "What is 'is' used for?", back: "Checks for identity (same object in memory)." },
-    { front: "What is a list?", back: "An ordered, mutable sequence of items." },
-    { front: "What is a tuple?", back: "An ordered, immutable sequence of items." },
-    { front: "What is a dictionary?", back: "An unordered collection of key-value pairs." },
-    { front: "Common method to add to a list?", back: ".append()" },
-    { front: "How to get a value from a dictionary?", back: "Using its key, e.g., my_dict['key']" },
-    { front: "What does the 'pass' statement do?", back: "Acts as a placeholder, does nothing." },
-    { front: "What is `__init__` in a class?", back: "The constructor method, called when creating an object." }
-  ]);
+  // Remove inline state declaration for flashcards
+  const flashcards: Flashcard[] = flashcardsData as Flashcard[];
 
   // Initialize flashcards if needed
   useEffect(() => {

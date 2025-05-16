@@ -3318,3 +3318,375 @@ def question_141():
     D) This code produces a ValueError
     """
 
+import math
+from abc import ABC, abstractmethod
+
+def question_142():
+    """
+    A function uses Merge Sort to sort the characters of a string in alphabetical order.
+    What is the output for the input 'merge'?
+
+    A) 'eegmr'
+    B) 'merge'
+    C) 'egrem'
+    D) 'mrege'
+    E) 'eemgr'
+    """
+
+def question_143():
+    """
+    In the context of a p-series implemented as a class inheriting from Progression,
+    what condition must be met for the series to be convergent, based on Calculus II section 8.2?
+
+    A) p > 1
+    B) p < 1
+    C) p = 1
+    D) p >= 1
+    E) p <= 1
+    """
+
+def question_144():
+    """
+    Consider an iterable that returns the factorial of numbers from 'start' to 'end' inclusive,
+    using math.factorial(). What is the first value returned for start=3 and end=5?
+
+    A) 6
+    B) 24
+    C) 120
+    D) 1
+    E) 0
+    """
+
+def question_145():
+    """
+    What is the output of the following code?
+
+    class A:
+        def show(self):
+            print("A")
+
+    class B(A):
+        def show(self):
+            print("B")
+
+    b = B()
+    b.show()
+
+    A) "A"
+    B) "B"
+    C) "A B"
+    D) Error
+    E) None
+    """
+
+def question_146():
+    """
+    Consider a recursive function to sum a list of integers:
+
+    def sum_list(lst):
+        if not lst:
+            return 0
+        return lst[0] + sum_list(lst[1:])
+
+    What is the time complexity of this function?
+
+    A) O(1)
+    B) O(n)
+    C) O(n log n)
+    D) O(n^2)
+    E) O(2^n)
+    """
+
+def question_147():
+    """
+    What is the output of the following code?
+
+    class Vehicle:
+        def __init__(self, make):
+            self.make = make
+
+        def get_type(self):
+            return "Vehicle"
+
+    class Car Ascendantly:
+        def get_type(self):
+            return "Car"
+
+    v = Vehicle("Toyota")
+    c = Car("Honda")
+
+    print(v.get_type())
+    print(c.get_type())
+
+    A) "Vehicle" followed by "Car"
+    B) "Toyota" followed by "Honda"
+    C) "Vehicle" followed by "Vehicle"
+    D) "Car" followed by "Car"
+    E) Error
+    """
+
+def question_148():
+    """
+    Consider a Progression class with a method sumProgression(n) that returns the sum
+    of the first n values. For an arithmetic progression with first term 1 and common
+    difference 2, what is sumProgression(3)?
+
+    A) 6
+    B) 9
+    C) 12
+    D) 15
+    E) 18
+    """
+
+def question_149():
+    """
+    Given the following directory JSON, what is the total size of all files?
+
+    {
+        "\\main": {
+            "\\photos": {
+                "\\Summer Trip": {
+                    "beach.png": 2400,
+                    "mountain.png": 1200,
+                    "lasagna.png": 2000
+                },
+                "\\Winter Trip": {
+                    "cabin.png": 2000,
+                    "skiing.png": 1800
+                }
+            },
+            "\\Homework": {
+                "\\Math": {
+                    "Algebra.pdf": 1000,
+                    "Statistics.txt": 1300,
+                    "\\Physics": {
+                        "Mechanics.pdf": 2000,
+                        "Electromagnetism.txt": 2200
+                    }
+                }
+            }
+        },
+        "\\backup": {
+            "\\photos": {
+                "\\Summer Trip": {
+                    "beach.png": 2400,
+                    "mountain.png": 1200,
+                    "city.mp4": 5800,
+                    "forest.mp4": 5600,
+                    "lasagna.png": 2000
+                }
+            }
+        }
+    }
+
+    A) 32900
+    B) 30900
+    C) 29500
+    D) 28000
+    E) 25000
+    """
+
+def question_150():
+    """
+    In a Vehicle class hierarchy where Vehicle is an abstract class with attributes
+    brand and year, and Car inherits from it, which constructor allows Car to be
+    initialized with year, brand, and number of seats?
+
+    A) def __init__(self, year, brand, seats):
+           super().__init__(brand, year)
+           self.seats = seats
+    B) def __init__(self, brand, year):
+           self.brand = brand
+           self.year = year
+    C) def __init__(self):
+           self.brand = "unknown"
+           self.year = "unknown"
+    D) def __init__(self, brand):
+           self.brand = brand
+           self.year = "unknown"
+    E) def __init__(self, seats):
+           self.seats = seats
+    """
+
+def question_151():
+    """
+    In an orchestra system, what is the output when adding StringInstrument("Violin")
+    and WoodwindInstrument("Flute") to an Orchestra and calling perform()?
+
+    A) ['Vibrations of strings', 'Resonant breathy tones']
+    B) ['Resonant breathy tones', 'Vibrations of strings']
+    C) 'Vibrations of strings' followed by 'Resonant breathy tones'
+    D) Error due to abstract class instantiation
+    E) ['Violin', 'Flute']
+    """
+
+def question_152():
+    """
+    Consider a recursive function to check if a word is a palindrome:
+
+    def is_palindrome(word):
+        if len(word) <= 1:
+            return True
+        if word[0] != word[-1]:
+            return False
+        return is_palindrome(word[1:-1])
+
+    What is the time complexity of this function?
+
+    A) O(1)
+    B) O(n)
+    C) O(n log n)
+    D) O(n^2)
+    E) O(2^n)
+    """
+
+def question_153():
+    """
+    For PyramidIterable('cow'), what is the sequence of outputs when iterated?
+
+    A) 'c', 'co', 'cow'
+    B) 'cow', 'co', 'c'
+    C) 'c', 'ow', 'cow'
+    D) 'co', 'c', 'cow'
+    E) 'cow', 'c', 'co'
+    """
+
+def question_154():
+    """
+    In an abstract Vehicle class with method rent_cost(days), which is a valid
+    implementation for a derived Car class?
+
+    A) def rent_cost(self, days): return 50 * days
+    B) def rent_cost(self): return 100
+    C) def rent_cost(self, days): return "50 * days"
+    D) def rent_cost(self, days): print(50 * days)
+    E) def rent_cost(self, days): return None
+    """
+
+def question_155():
+    """
+    Consider a Book class with a read_time() method assuming 1 page per minute.
+    For a book with 310 pages, what is read_time()?
+
+    A) 310 minutes
+    B) 300 minutes
+    C) 320 minutes
+    D) 155 minutes
+    E) 620 minutes
+    """
+
+def question_156():
+    """
+    Given sorting algorithms with their worst-case time complexities:
+    - Selection Sort: O(n^2)
+    - Insertion Sort: O(n^2)
+    - Merge Sort: O(n log n)
+    - Quick Sort: O(n^2)
+    - Binary Search: O(log n)
+    Which ranks them in descending order of time complexity?
+
+    A) Selection Sort = Insertion Sort = Quick Sort > Merge Sort > Binary Search
+    B) Merge Sort > Quick Sort > Selection Sort > Insertion Sort > Binary Search
+    C) Quick Sort > Merge Sort > Selection Sort > Insertion Sort > Binary Search
+    D) Selection Sort > Merge Sort > Quick Sort > Insertion Sort > Binary Search
+    E) Merge Sort = Quick Sort > Selection Sort = Insertion Sort > Binary Search
+    """
+
+def question_157():
+    """
+    In a Cat class inheriting from Animal, what is the average daily sleep time?
+
+    A) 12 to 16 hours
+    B) 8 to 10 hours
+    C) 6 to 8 hours
+    D) 10 to 12 hours
+    E) 16 to 20 hours
+    """
+
+def question_158():
+    """
+    For the recursive function:
+
+    def mysteryFunc(n):
+        if n <= 1:
+            return n
+        return mysteryFunc(n-1) + mysteryFunc(n-2)
+
+    What is the time complexity?
+
+    A) O(n)
+    B) O(n^2)
+    C) O(n log n)
+    D) O(2^n)
+    E) O(log n)
+    """
+
+def question_159():
+    """
+    In a DeskLamp class with a replace method, what happens when replacing a
+    lightbulb with different wattage?
+
+    A) Raises IncompatibleLightBulb exception
+    B) Overwrites the existing lightbulb
+    C) Returns True
+    D) Sets wattage to default (25)
+    E) No change occurs
+    """
+
+def question_160():
+    """
+    For an eProgression iterator estimating e (∑ 1/n!), what is the 5th term
+    after 6 iterations?
+
+    A) 2.6666666666
+    B) 2.7083333333
+    C) 2.5
+    D) 2.0
+    E) 1.0
+    """
+
+def question_161():
+    """
+    Given a dictionary of students and R scores, which QuickSort pivot choice
+    ensures deterministic sorting when sorting by score?
+
+    A) Last element
+    B) First element
+    C) Middle element
+    D) Random element
+    E) Median of three
+    """
+
+def question_162():
+    """
+    For a recursive Longest Common Prefix function on ["flower", "flow", "flight"],
+    what is the output?
+
+    A) "fl"
+    B) "flow"
+    C) "f"
+    D) "flo"
+    E) ""
+    """
+
+def question_163():
+    """
+    For EvenIterable with n=3, what is the sequence of outputs?
+
+    A) 2, 4, 6
+    B) 0, 2, 4
+    C) 4, 6, 8
+    D) 2, 4, 6, 8
+    E) 6, 4, 2
+    """
+
+def question_164():
+    """
+    For a factorials iterator from 0! to 5!, what is the sequence without switch?
+
+    A) 1, 1, 2, 6, 24, 120
+    B) 120, 24, 6, 2, 1, 1
+    C) 1, 2, 6, 24, 120, 720
+    D) 0, 1, 2, 6, 24, 120
+    E) 1, 1, 2, 6, 24, 0
+    """

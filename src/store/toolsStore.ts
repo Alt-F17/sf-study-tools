@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -42,7 +41,7 @@ interface ToolsState {
   
   // Word Jumble state
   wordJumbleState: JumbleState;
-  initWordJumble: () => void;
+  initWordJumble: (totalWords: number) => void;
   updateWordJumbleState: (updates: Partial<JumbleState>) => void;
   
   // Flashcards state
@@ -84,10 +83,10 @@ export const useToolsStore = create<ToolsState>()(
         currentIndex: 0,
         mistakes: 0,
       },
-      initWordJumble: () => set((state) => ({
+      initWordJumble: (totalWords) => set((state) => ({
         wordJumbleState: {
           ...state.wordJumbleState,
-          deckOrder: shuffleArray(Array.from({ length: 20 }, (_, i) => i)),
+          deckOrder: shuffleArray(Array.from({ length: totalWords }, (_, i) => i)),
           currentIndex: 0,
           mistakes: 0,
         }

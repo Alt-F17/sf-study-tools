@@ -19,7 +19,8 @@ const Flashcards: React.FC = () => {
 
   // Initialize flashcards if needed
   useEffect(() => {
-    if (deckOrder.length === 0) {
+    // Initialize or re-initialize if deckOrder is empty or outdated length
+    if (deckOrder.length === 0 || deckOrder.length !== flashcards.length) {
       initFlashcards(flashcards.length);
     }
   }, [deckOrder.length, flashcards.length, initFlashcards]);

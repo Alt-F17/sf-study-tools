@@ -1,51 +1,40 @@
 # Ideas for SF2 - Study Tools (2025)
 
 - [X] Word Jumble
-DONE: [ ] Populate
-
+DONE: [X] Populate JSON: [X] Perfected
 
 - [X] Flashcards
-DONE: [ ] Populate
-
+DONE: [X] Populate JSON: [X] Perfected
 
 - [X] Louisa ConcepTests
-DONE: [ ] Populate
-
+DONE: [ ] Populate JSON: [ ] Perfected
 
 - [X] Stack VS Queue
-DONE: COMPLETELY DONE 
-
+DONE: COMPLETELY DONE: [X] Perfected
 
 - [X] Pandas DataFrame playground with small datasets
-DONE: [ ] Populate
-
+DONE: [X] Populate JSON: [X] Perfected
 
 - [X] "Spot the Bug" challenges with common Python errors
-DONE: [ ] Populate
-
+DONE: [ ] Populate JSON: [ ] Perfected
 
 - [X] Super Duper Hard Python Problems
-DONE: [ ] Populate
-
+DONE: [ ] Populate JSON: [ ] Perfected
 
 - [X] OOP class hierarchy diagram builder
-DONE: COMPLETELY DONE
-
+DONE: COMPLETELY DONE: [X] Perfected, NO because beta....
 
 - [X] Step-by-step animator
-DONE: COMPLETELY DONE
+DONE: COMPLETELY DONE: [X] Perfected
 
 - [X] Complexity calculator
-DONE: COMPLETELY DONE
-
+DONE: COMPLETELY DONE: [X] Perfected
 
 - [X] Python terminal emulator for practice
-DONE: COMPLETELY DONE
-
+DONE: COMPLETELY DONE: [X] Perfected
 
 - [X] Python concept map navigator
-DONE: COMPLETELY DONE
-
+DONE: COMPLETELY DONE: [X] Perfected
 
 - [X] Other / More Ressources
 DONE: [X] Populate: Done for now...
@@ -54,16 +43,12 @@ DONE: [X] Populate: Done for now...
 ---
 
 
-
 # Requested thus far:
 - Recursive Functions [X]
 - JSON [X]
 - PD/PLT/NP [X]
 - Classes, Inheritance [X]
 - Multi-Concept Problems [X]
-- 
-
-
 
 
 --- FINAL SPECIFICS ---

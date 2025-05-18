@@ -45,11 +45,11 @@ const WordJumble: React.FC = () => {
   }, [shuffleArray]);
 
   useEffect(() => {
-    // Initialize if deckOrder is empty
-    if (deckOrder.length === 0) {
-      initWordJumble();
+    // Initialize or re-initialize if deckOrder empty or mismatched length
+    if (deckOrder.length === 0 || deckOrder.length !== words.length) {
+      initWordJumble(words.length);
     }
-  }, [deckOrder.length, initWordJumble]);
+  }, [deckOrder.length, initWordJumble, words.length]);
 
   useEffect(() => {
     if (deckOrder.length > 0 && currentIndex < deckOrder.length) {
@@ -81,7 +81,9 @@ const WordJumble: React.FC = () => {
     }
   };
 
-  const progress = Math.round((currentIndex / words.length) * 100);
+  const progress = deckOrder.length > 0
+    ? Math.round((currentIndex / deckOrder.length) * 100)
+    : 0;
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -89,14 +91,19 @@ const WordJumble: React.FC = () => {
         <CardTitle>Word Jumble</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="mb-4">Unscramble the Python keyword or concept:</p>
+        <p className="mb-4">Unscramble the Python keyword or concept ( _ = <i>space</i> <small>(sometimes)</small>):</p>
+        {/* Numeric progress indicator */}
+        <div className="flex justify-between items-center mb-1 text-sm text-gray-600">
+          <span>{currentIndex} / {deckOrder.length}</span>
+          <span>{progress}%</span>
+        </div>
         <Progress value={progress} className="mb-4" />
-        
+
         {isCompleted ? (
           <div className="text-center py-8">
             <h3 className="text-2xl font-bold mb-4">🎉 Completed!</h3>
             <p className="mb-4">You made {mistakes} mistakes.</p>
-            <Button onClick={initWordJumble}>Play Again</Button>
+            <Button onClick={() => initWordJumble(words.length)}>Play Again</Button>
           </div>
         ) : (
           <>

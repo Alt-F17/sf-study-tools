@@ -5,23 +5,22 @@ import 'ace-builds/src-noconflict/mode-python';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-const initialCode = `# Read grades.csv from Pyodide filesystem
-import pandas as pd
-import matplotlib.pyplot as plt
+const initialCode = `
+# Import necessary libraries
 
-# Load DataFrame
-print('DataFrame loaded from grades.csv:')
-df = pd.read_csv('grades.csv')
-print(df)
+# Read the CSV file
+
+# Print the DataFrame
+
+# Print a summary and/or description of the DataFrame
 
 # Challenge 1: swap keys and values
-swapped = dict(zip(df['Grade'], df['Student']))
-print('\\nSwapped mapping (Grade -> Student):')
-print(swapped)
 
 # Challenge 2: plot grades
-df.plot(kind='bar', x='Student', y='Grade')
-plt.title('Class Grades')
+
+# Challenge 3: plot line graph attendance by class 
+
+# Challenge 4: plot attendance by class with different colors
 `;
 
 const PandasPlayground: React.FC = () => {
@@ -105,13 +104,35 @@ const PandasPlayground: React.FC = () => {
         <CardContent>
           {/* Preview of CSV file */}
           <div className="mb-4">
-            <div className="text-sm font-semibold mb-1">grades.csv (as DataFrame)</div>
+            <div className="text-sm font-semibold mb-1">grades.csv</div>
             <pre className="bg-gray-50 p-2 rounded text-sm whitespace-pre-wrap">
-            {`   `}<u>{`Student`}</u>{`       `}<u>{`Grade`}</u>{`
-0  Alice         85
-1  Bob           92
-2  Charlie       78
-3  Diana         88`}
+            {`   `}<u>{`Student`}</u>{`      `}<u>{`Grade`}</u>{`   `}<u>{`Age`}</u>{`   `}<u>{`Class`}</u>{`          `}<u>{`Credits`}</u>{`   `}<u>{`Attendance%`}</u>{`
+0  Alice          85     20   Physics             45     92
+1  Bob            92     21   Mathematics         60     98
+2  Charlie        78     19   Computer Science    30     88
+3  Diana          88     22   Biology             75     95
+4  Ethan          91     20   Economics           50     90
+5  Fiona          74     23   Physics             40     85
+6  George         95     21   Mathematics         68     99
+7  Henry          82     20   Computer Science    55     93
+8  Ian            89     22   Biology             62     96
+9  Julia          76     19   Economics           28     84
+10 Kevin          94     23   Physics             70     97
+11 Laura          81     20   Mathematics         58     91
+12 Michael        87     21   Computer Science    65     94
+13 Noah           90     22   Biology             72     98
+14 Oliver         79     19   Economics           33     89
+15 Paul           93     23   Physics             66     97
+16 Quandale       84     20   Mathematics         53     92
+17 Rachel         77     21   Computer Science    47     87
+18 Steve          88     22   Biology             61     95
+19 Tina           80     19   Economics           35     90
+20 Ulysses        86     21   Physics             50     92
+21 Victor         93     23   Mathematics         64     97
+22 William        79     24   Computer Science    45     88
+23 Xavier         85     22   Biology             54     93
+24 Ysaak          77     20   Economics           38     89
+25 Zach           90     25   Physics             60     95`}
             </pre>
           </div>
           <AceEditor

@@ -1,5 +1,0 @@
-[
-  {"name": "sample.txt", "content": "This is a sample text file.\nIt has multiple lines.\nYou can read from it."},
-  {"name": "data.csv", "content": "name,age,city\nJohn,24,New York\nSarah,32,Boston\nMike,28,Chicago"},
-  {"name": "config.json", "content": "{\"appName\":\"File I/O Simulator\",\"version\":\"1.0.0\"}"}
-]

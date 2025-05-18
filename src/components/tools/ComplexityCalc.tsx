@@ -12,18 +12,24 @@ interface LineAnalysis {
 }
 
 const ComplexityCalc: React.FC = () => {
-  const [code, setCode] = useState<string>('');
+  const defaultCode = `# Type or paste your Python code here
+  
+n = int(input())
+for num in range(n):
+    print(num)`;
+  const [code, setCode] = useState<string>(defaultCode);
   const [analysis, setAnalysis] = useState<LineAnalysis[]>([]);
   const [timeComplexity, setTimeComplexity] = useState<string>('');
   const [spaceComplexity, setSpaceComplexity] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<React.ReactNode>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [showBigOcalc, setShowBigOcalc] = useState<boolean>(false);
 
   const handleAnalyze = async () => {
     setError('');
     setLoading(true);
     try {
-      const response = await fetch('https://api.example.com/complexity', { // Replace with your API endpoint SOOOONNNN
+      const response = await fetch('https://api.example.com/complexity', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code }),
@@ -34,7 +40,20 @@ const ComplexityCalc: React.FC = () => {
       setSpaceComplexity(data.spaceComplexity);
       setAnalysis(data.analysis);
     } catch (err: any) {
-      setError(err.message || 'Analysis failed');
+      console.error('ComplexityCalc API error:', err);
+      setError(
+        <>
+          Fun Fact: This is actually impossible to implement! Calculating big-O complexity is undecidable and infeasible. Some tools can provide estimates (like BigOCalc, which is the most accurate tool I managed to find that uses AI to analyze code and provide a rough estimate), but due to the Halting Problem, it is impossible to determine the complexity of an arbitrary program. You can read more about it{' '}
+          <a
+            href="https://en.wikipedia.org/wiki/Halting_problem"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline"
+          >
+            here
+          </a>. Enjoy!
+        </>
+      );
     } finally {
       setLoading(false);
     }
@@ -46,19 +65,39 @@ const ComplexityCalc: React.FC = () => {
         <CardTitle>Complexity Calculator</CardTitle>
       </CardHeader>
       <CardContent>
-        <AceEditor
-          mode="python"
-          theme="github_light_default"
-          name="complexity-editor"
-          onChange={setCode}
-          value={code}
-          fontSize={14}
-          width="100%"
-          height="200px"
-          setOptions={{ useWorker: false, maxLines: Infinity }}
-        />
+        {showBigOcalc ? (
+          <div className="w-full h-[600px] border rounded overflow-hidden">
+            <iframe
+              src="https://www.bigocalc.com"
+              title="BigOcalc"
+              className="w-full h-full"
+              frameBorder="0"
+            />
+          </div>
+        ) : (
+          <div className="bg-gray-50 text-white p-1 rounded-md">
+            <div className="flex items-center justify-between p-2 border-b border-gray-300 mb-2">
+              <div className="text-sm font-mono text-gray-700">analysis.py</div>
+              <Button onClick={handleAnalyze} disabled={loading || !code.trim()}>
+                {loading ? 'Analyzing...' : 'Calculate Complexity'}
+              </Button>
+            </div>
+            <AceEditor
+              mode="python"
+              theme="github_light_default"
+              name="complexity-editor"
+              onChange={setCode}
+              value={code}
+              fontSize={14}
+              width="100%"
+              height="200px"
+              showPrintMargin={false}
+              setOptions={{ useWorker: false, maxLines: Infinity }}
+            />
+          </div>
+        )}
         {error && <p className="mt-2 text-red-600">{error}</p>}
-        {!error && analysis.length > 0 && (
+        {!showBigOcalc && !error && analysis.length > 0 && (
           <div className="mt-4">
             <h3 className="font-semibold">Overall Complexity</h3>
             <p>Time: <strong>{timeComplexity}</strong></p>
@@ -75,9 +114,9 @@ const ComplexityCalc: React.FC = () => {
           </div>
         )}
       </CardContent>
-      <CardFooter>
-        <Button onClick={handleAnalyze} disabled={loading || !code.trim()}>
-          {loading ? 'Analyzing...' : 'Calculate Complexity'}
+      <CardFooter className="flex space-x-2">
+        <Button variant="outline" onClick={() => setShowBigOcalc(!showBigOcalc)}>
+          {showBigOcalc ? 'Back to Editor' : 'Use BigOCalc'}
         </Button>
       </CardFooter>
     </Card>

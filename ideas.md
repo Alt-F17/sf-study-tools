@@ -19,6 +19,7 @@ DONE: COMPLETELY DONE
 - [X] Pandas DataFrame playground with small datasets
 DONE: [ ] Populate
 
+
 - [X] "Spot the Bug" challenges with common Python errors
 DONE: [ ] Populate
 
@@ -27,32 +28,15 @@ DONE: [ ] Populate
 DONE: [ ] Populate
 
 
-- [ ] File I/O simulation sandbox
-FIX: [ ]
-Split into 3 parts:
-Side bar containing a list of files and their types.
-Code editor to pass python scripts.
-Section showing the contents of the active file and the position of the pointer.
-Challenge to read a file and print the contents to the console.
-Challenge to take in the contents of a file and write them to a new file with a different name and format.
-Challenge to take in the contents of a file and write them to a JSON file.
-Validate the results for each challenge and show a success message.
-
-
-- [ ] OOP class hierarchy diagram builder
-Use animal hierarchy as an example.
-Create a class diagram of the animal hierarchy.
-Create animals in subclasses and show the relationships between them.
+- [X] OOP class hierarchy diagram builder
+DONE: COMPLETELY DONE
 
 
 - [X] Step-by-step animator
-DONE: [ ] Populate: Preset Algorithms to include: Selection sort, Insertion sort, Merge sort, Quick sort || Fibonacci, Factorial, Binary search.
+DONE: COMPLETELY DONE
 
-- [ ] Complexity calculator
-Calculate the time and space complexity of a given algorithm.
-ERRORS: make sure the code lets the user know if the code is not correct.
-Line by line complexity calculator.
-Final verdict of the complexity of the algorithm with a breakdown explination.
+- [X] Complexity calculator
+DONE: COMPLETELY DONE
 
 
 - [X] Python terminal emulator for practice

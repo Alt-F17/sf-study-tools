@@ -4,21 +4,26 @@ SF Study Tools is a web application designed to help students in Dawson Collegeâ
 
 UPDATE: We're Live! Good luck for your finals everyone <3
 
-## Table of Contents
-- [SF Study Tools](#sf-study-tools)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Built With](#built-with)
-  - [Deployment](#deployment)
-  - [Contributing](#contributing)
-  - [License](#license)
-
 ## Features
 - Interactive tools with instant feedback  
 - Webpage memory (so you don't lose your progress)  
-- Code snippet library organized by topic  
-- Searchable practice exercises  
-- Responsive design for desktop and mobile  
+- Code snippet library organized by topic
+
+## Tool List:
+- Word Jumble
+- SF2 Flashcards
+- SF2 ConcepTests
+- Stack or Queue?
+- Pandas and Matplotlib
+- Spot the Bug
+- Final Boss Problems
+- OOP Inheritance Diagram
+- Step-by-Step Animator
+- Complexity Calculator
+- Python Terminal + File I/O
+- Python Concept Map
+- A few more Tools...
+- SF1 Study Tools
 
 ## Built With
 - Lovable AI (initial CSS and structure)

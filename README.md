@@ -2,6 +2,8 @@
 
 SF Study Tools is a web application designed to help students in Dawson Collegeâ€™s SF coding classes review key concepts through interactive quizzes, code snippets, and practice exercises.
 
+UPDATE: We're Live! Good luck for your finals everyone <3
+
 ## Table of Contents
 - [SF Study Tools](#sf-study-tools)
   - [Table of Contents](#table-of-contents)
@@ -19,13 +21,14 @@ SF Study Tools is a web application designed to help students in Dawson Collegeâ
 - Responsive design for desktop and mobile  
 
 ## Built With
+- Lovable AI (initial CSS and structure)
 - JavaScript / TypeScript  
 - React  
 - Node.js & Express  
 
 ## Deployment
 The live site is hosted at:  
-https://sf-study-tools.com/sf2  (soon)
+https://sf-study-tools.com (we're live!)
 
 ## Contributing
 1. Fork the repository  
@@ -33,6 +36,3 @@ https://sf-study-tools.com/sf2  (soon)
 3. Commit your changes (`git commit -m 'Add YourFeature'`)  
 4. Push to the branch (`git push origin feature/YourFeature`)  
 5. Open a Pull Request  
-
-## License
-Distributed under the MIT License. See `LICENSE` for details.

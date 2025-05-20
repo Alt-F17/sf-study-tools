@@ -30,7 +30,8 @@ const SpotBug: React.FC = () => {
 
   // Initialize if needed
   useEffect(() => {
-    if (deckOrder.length === 0 && bugProblems.length > 0) {
+    // Initialize or reset if deck empty or mismatched JSON length
+    if ((deckOrder.length === 0 || deckOrder.length !== bugProblems.length) && bugProblems.length > 0) {
       initSpotBug(bugProblems.length);
     }
   }, [deckOrder.length, bugProblems.length, initSpotBug]);

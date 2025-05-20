@@ -25,139 +25,264 @@ interface Problem {
 const problems: Problem[] = [
   {
     id: 1,
-    title: "1. E-Commerce Order 💲",
-    description: "Calculate final price with tax and delivery.",
-    defaultCode: `def calculate_subtotal(items):
-    """
-    Calculate subtotal (sum) of an e-commerce order.
-    """
-    subtotal = 0.0
-    for price, qty, discount in items:
-        subtotal += price * qty * (1 - discount)
-    return subtotal
+    title: "Problem 1: Sales Data Analysis",
+    description: `You’re a data analyst at a retail company tasked with analyzing sales data from a CSV file named 'sales_data.csv', which contains columns: date, product, quantity, price. Your goal is to read the file, clean it, compute total sales per product, identify the top 10 products, and visualize them in a bar chart. Define a custom FileError exception to handle file issues.
 
+Sample Data:\n"date,product,quantity,price\n2023-01-01,Widget A,10,5.0\n2023-01-01,Widget B,5,10.0\n2023-01-02,Widget A,15,5.0\n2023-01-02,Widget C,20,2.0"`,
+    defaultCode: `import pandas as pd
+import matplotlib.pyplot as plt
 
-def process_checkout(items, shipping_address):
-    """
-    Process checkout with tax and delivery.
-    """
-    addresses = {'Montreal': (10,14.975), 'Toronto': (542,13), 'Vancouver': (4924,12), 'Edmonton': (3584,5), 'Charlottetown': (1149,15)}
-    dist, tax = addresses.get(shipping_address, (0,0))
-    sub = calculate_subtotal(items)
-    delivery = dist * 0.018
-    return round(sub * (1 + tax/100) + delivery, 2)
-`,
+class FileError(Exception):
+    pass
+
+try:
+    df = pd.read_csv('sales_data.csv')
+except FileNotFoundError:
+    raise FileError("The file 'sales_data.csv' was not found.")
+except pd.errors.ParserError:
+    raise FileError("The file 'sales_data.csv' is malformed.")
+
+df = df.dropna()
+df['total'] = df['quantity'] * df['price']
+total_sales = df.groupby('product')['total'].sum().sort_values(ascending=False)
+top_10 = total_sales.head(10)
+plt.figure(figsize=(10, 6))
+plt.bar(top_10.index, top_10.values)
+plt.xlabel('Product')
+plt.ylabel('Total Sales')
+plt.title('Top 10 Products by Total Sales')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.savefig('top_products.png')`,
     testScript: (userCode) => `
 ${userCode}
-import json
-results=[]
-# test1
+import pandas as pd, json
+# Prepare sample CSV
+data = """
+date,product,quantity,price
+2023-01-01,Widget A,10,5.0
+2023-01-01,Widget B,5,10.0
+2023-01-02,Widget A,15,5.0
+2023-01-02,Widget C,20,2.0
+"""
+with open('sales_data.csv','w') as f: f.write(data)
+results = []
+input_lines = data.strip().splitlines()
 try:
-    items1=[(10,2,0.1),(5,1,0)]
-    r=calculate_subtotal(items1)
-    results.append({"test":"calculate_subtotal","input":items1,"pass":r==23.0,"expected":23.0,"got":r})
+    df = pd.read_csv('sales_data.csv')
+    df = df.dropna()
+    df['total'] = df['quantity'] * df['price']
+    total_sales = df.groupby('product')['total'].sum().sort_values(ascending=False)
+    got = list(total_sales.head(2).index)
+    expected = ["Widget A", "Widget B"]
+    results.append({"test":"top_products","input": input_lines, "expected": expected, "got": got, "pass": got==expected})
 except Exception as e:
-    results.append({"test":"calculate_subtotal","input":items1,"pass":False,"error":str(e)})
-# test2
-try:
-    items2=[(10,2,0.1),(5,1,0)]
-    addr='Toronto'
-    r=process_checkout(items2, addr)
-    exp=(10*2*0.9+5)*1.13 + 542*0.018
-    results.append({"test":"process_checkout","input":[items2,addr],"pass":abs(r-exp)<1e-6,"expected":round(exp,6),"got":r})
-except Exception as e:
-    results.append({"test":"process_checkout","input":[items2,addr],"pass":False,"error":str(e)})
+    results.append({"test":"top_products","input": input_lines, "expected": expected, "got": None, "pass": False, "error": str(e)})
 json.dumps(results)
 `,
   },
   {
     id: 2,
-    title: "2. Pizza Time! 🍕",
-    description: "Compute pizza order total with deals.",
-    defaultCode: `def calculate_pizza_price(size, toppings):
-    prices={'S':8,'M':10,'L':12}
-    return prices.get(size.upper(),0) + 1.5 * len(toppings)
+    title: "Problem 2: Custom Data Structures",
+    description: `Create an abstract base class DataStructure with methods add, remove, is_empty, and make it iterable. Implement Stack (LIFO) and Queue (FIFO). Write process_data(ds, elements) to add elements and remove/print them. Demonstrate polymorphism.`,
+    defaultCode: `from abc import ABC, abstractmethod
 
+class DataStructure(ABC):
+    @abstractmethod
+    def add(self, element): pass
+    @abstractmethod
+    def remove(self): pass
+    @abstractmethod
+    def is_empty(self): pass
+    @abstractmethod
+    def __iter__(self): pass
 
-def calculate_order_total(pizzas):
-    total = sum(calculate_pizza_price(s,t) for s,t in pizzas)
-    if len(pizzas) >= 2:
-        total *= 0.9
-    for s,t in pizzas:
-        if s.upper()=='L' and len(t)>=3:
-            total -= 2
-    return round(total,2)
-`,
+class Stack(DataStructure):
+    def __init__(self): self.items = []
+    def add(self, element): self.items.append(element)
+    def remove(self): return self.items.pop() if not self.is_empty() else None
+    def is_empty(self): return len(self.items)==0
+    def __iter__(self): return iter(self.items[::-1])
+
+class Queue(DataStructure):
+    def __init__(self): self.items = []
+    def add(self, element): self.items.append(element)
+    def remove(self): return self.items.pop(0) if not self.is_empty() else None
+    def is_empty(self): return len(self.items)==0
+    def __iter__(self): return iter(self.items)
+
+def process_data(ds, elements):
+    for e in elements: ds.add(e)
+    output=[]
+    while not ds.is_empty(): output.append(ds.remove())
+    return output`,
     testScript: (userCode) => `
 ${userCode}
 import json
-results=[]
-# test1
-try:
-    size='L'
-    toppings=['a','b','c']
-    r=calculate_pizza_price(size, toppings)
-    results.append({"test":"calculate_pizza_price","input":[size,toppings],"pass":r==(12+1.5*3),"expected":12+1.5*3,"got":r})
-except Exception as e:
-    results.append({"test":"calculate_pizza_price","input":[size,toppings],"pass":False,"error":str(e)})
-# test2
-try:
-    pizzas=[('M',['x','y']),('L',['a','b','c','d'])]
-    r=calculate_order_total(pizzas)
-    exp=(10+1.5*2 + 12+1.5*4)*0.9 - 2
-    results.append({"test":"calculate_order_total","input":pizzas,"pass":abs(r-exp)<1e-6,"expected":round(exp,6),"got":r})
-except Exception as e:
-    results.append({"test":"calculate_order_total","input":pizzas,"pass":False,"error":str(e)})
+results = []
+input_data = [1,2,3]
+stack_res = process_data(Stack(), input_data)
+queue_res = process_data(Queue(), input_data)
+results.append({"test":"Stack LIFO","input":input_data,"expected":[3,2,1],"got":stack_res})
+results.append({"test":"Queue FIFO","input":input_data,"expected":[1,2,3],"got":queue_res})
 json.dumps(results)
 `,
   },
   {
     id: 3,
-    title: "3. Ultimate Gamer 🎮",
-    description: "Calculate session points and update rank.",
-    defaultCode: `def calculate_session_points(kills, time_alive, position):
-    points=kills*50 + time_alive*10
-    if position<=10: points+=300
-    if position==1: points+=500
-    return points
+    title: "Problem 3: Maze Solver",
+    description: `Write a recursive function to find a path through a maze (2D list) from (0,0) to (n-1,m-1) using backtracking. Return the path as list of coords.`,
+    defaultCode: `def solve_maze(maze, x, y, path):
+    if x<0 or y<0 or x>=len(maze) or y>=len(maze[0]) or maze[x][y]!=0:
+        return False
+    path.append((x,y))
+    if x==len(maze)-1 and y==len(maze[0])-1:
+        return True
+    maze[x][y]=2
+    if (solve_maze(maze,x+1,y,path) or solve_maze(maze,x,y+1,path)
+        or solve_maze(maze,x-1,y,path) or solve_maze(maze,x,y-1,path)):
+        return True
+    path.pop()
+    maze[x][y]=0
+    return False
 
-
-def update_player_rank(current_rank, recent_sessions):
-    avg=sum(calculate_session_points(*s) for s in recent_sessions) // len(recent_sessions)
-    ranks=[('Bronze',0),('Silver',1000),('Gold',2000),('Diamond',3000)]
-    new=current_rank
-    for name,th in ranks:
-        if avg>=th: new=name
-    return f"{current_rank} => {new}"
-`,
+def find_path(maze):
+    path=[]
+    if solve_maze(maze,0,0,path): return path
+    return []`,
     testScript: (userCode) => `
 ${userCode}
 import json
-results=[]
-# test1
-try:
-    kills=5
-    time_alive=10
-    position=1
-    r=calculate_session_points(kills, time_alive, position)
-    exp=5*50+10*10+300+500
-    results.append({"test":"calculate_session_points","input":[kills,time_alive,position],"pass":r==exp,"expected":exp,"got":r})
-except Exception as e:
-    results.append({"test":"calculate_session_points","input":[kills,time_alive,position],"pass":False,"error":str(e)})
-# test2
-try:
-    current_rank='Bronze'
-    sessions=[(5,10,1),(0,20,15)]
-    r=update_player_rank(current_rank, sessions)
-    results.append({"test":"update_player_rank","input":[current_rank,sessions],"pass":r=="Bronze => Silver","expected":"Bronze => Silver","got":r})
-except Exception as e:
-    results.append({"test":"update_player_rank","input":[current_rank,sessions],"pass":False,"error":str(e)})
+results = []
+maze = [[0,1,0,0],[0,0,0,1],[1,1,0,0],[0,0,0,0]]
+expected_path = [(0,0),(1,0),(1,1),(1,2),(2,2),(3,2),(3,3)]
+path = find_path(maze)
+results.append({"test":"find_path","input":maze,"expected":expected_path,"got":path})
+json.dumps(results)
+`,
+  },
+  {
+    id: 4,
+    title: "Problem 4: Student Grades Analysis",
+    description: `Extract students with at least one grade above 90, list all unique subjects, create dict mapping subjects to students scoring >85.`,
+    defaultCode: `students=[{"name":"Alice","grades":{"math":85,"science":92,"english":78}},
+{"name":"Bob","grades":{"math":95,"science":88,"english":82}},
+{"name":"Charlie","grades":{"math":72,"science":75,"history":90}}]
+high_scorers=[s["name"] for s in students if any(g>90 for g in s["grades"].values())]
+all_subjects={sub for s in students for sub in s["grades"].keys()}
+subject_high_scorers={}
+for s in students:
+    for sub,gr in s["grades"].items():
+        if gr>85:
+            subject_high_scorers.setdefault(sub,[]).append(s["name"])`,
+    testScript: (userCode) => `
+${userCode}
+import json
+results = []
+input_data = students
+expected_high = ["Alice", "Bob"]
+results.append({"test":"high_scorers","input": input_data, "expected": expected_high, "got": high_scorers, "pass": high_scorers==expected_high})
+expected_subjects = sorted(list(all_subjects))
+results.append({"test":"subjects","input": input_data, "expected": expected_subjects, "got": sorted(list(all_subjects)), "pass": sorted(list(all_subjects))==expected_subjects})
+json.dumps(results)
+`,
+  },
+  {
+    id: 5,
+    title: "Problem 5: Debugging and Error Handling",
+    description: `Fix script that reads integers from data.txt to handle file not found, invalid data, division by zero.`,
+    defaultCode: `def process_data():
+    try:
+        with open('data.txt','r') as file: lines=file.readlines()
+    except FileNotFoundError:
+        print("Error: The file 'data.txt' was not found."); return
+    total=0; count=0
+    for line in lines:
+        try: number=int(line.strip()); total+=number; count+=1
+        except ValueError: print(f"Skipping invalid: {line}")
+    if count==0: print("Error: No valid numbers found.")
+    else: print(f"The average is {total/count}")`,
+    testScript: (userCode) => `
+${userCode}
+import json, os
+# Prepare data.txt
+lines=["10","abc","20"]
+with open('data.txt','w') as f: f.write("10\nabc\n20\n")
+results = []
+exists = os.path.exists('data.txt')
+results.append({"test":"file_exists","input": lines, "expected": True, "got": exists, "pass": exists==True})
+json.dumps(results)
+`,
+  },
+  {
+    id: 6,
+    title: "Problem 6: Custom Class with Operators and Iteration",
+    description: `Define Point with x,y tuple; implement __repr__, __eq__, __lt__ (by distance), iterable, use total_ordering. Sort list of points.`,
+    defaultCode: `from functools import total_ordering; import math
+@total_ordering
+class Point:
+    def __init__(self,x,y): self.coords=(x,y)
+    def __repr__(self): return f"Point({self.coords[0]},{self.coords[1]})"
+    def __eq__(self,other): return isinstance(other,Point) and self.coords==other.coords
+    def __lt__(self,other): return math.hypot(*self.coords)<math.hypot(*other.coords)
+    def __iter__(self): return iter(self.coords)`,
+    testScript: (userCode) => `
+${userCode}
+import json
+results = []
+input_points = [(3,4),(1,2),(0,0)]
+pts = [Point(x,y) for x,y in input_points]
+got = [repr(p) for p in sorted(pts)]
+expected = ["Point(0,0)","Point(1,2)","Point(3,4)"]
+results.append({"test":"sorted_points","input": input_points, "expected": expected, "got": got, "pass": got==expected})
+json.dumps(results)
+`,
+  },
+  {
+    id: 7,
+    title: "Problem 7: Sorted List with Bisect",
+    description: `Use bisect.insort to maintain sorted list from given numbers, then extract even numbers via list comprehension.`,
+    defaultCode: `import bisect
+numbers=[5,3,8,6,2,7,1]
+sorted_list=[]
+for num in numbers: bisect.insort(sorted_list,num)
+even=[n for n in sorted_list if n%2==0]`,
+    testScript: (userCode) => `
+${userCode}
+import json
+results = []
+input_nums = [5,3,8,6,2,7,1]
+got = even
+expected = [2,6,8]
+results.append({"test":"even_numbers","input": input_nums, "expected": expected, "got": got, "pass": got==expected})
+json.dumps(results)
+`,
+  },
+  {
+    id: 8,
+    title: "Problem 8: Multiple Inheritance",
+    description: `Define Flyer.fly, Swimmer.swim, Duck(Flyer,Swimmer).quack, and print MRO.`,
+    defaultCode: `class Flyer: def fly(self): print("fly")
+class Swimmer: def swim(self): print("swim")
+class Duck(Flyer,Swimmer): def quack(self): print("quack")`,
+    testScript: (userCode) => `
+${userCode}
+import json
+results = []
+input_data = []
+got = [c.__name__ for c in Duck.__mro__]
+expected = ["Duck","Flyer","Swimmer","object"]
+results.append({"test":"mro","input": input_data, "expected": expected, "got": got, "pass": got==expected})
 json.dumps(results)
 `,
   },
 ];
 
 const SuperHardProblems: React.FC = () => {
+  // Persist user-written code for each problem
+  const [codes, setCodes] = useState<Record<number, string>>(() =>
+    problems.reduce((acc, p) => ({ ...acc, [p.id]: p.defaultCode }), {})
+  );
   const [pyodide, setPyodide] = useState<any>(null);
   const editors = useRef<Record<number, any>>({});
   const [results, setResults] = useState<Record<number, TestResult[]>>({});
@@ -182,23 +307,31 @@ const SuperHardProblems: React.FC = () => {
 
   const runTest = async (prob: Problem) => {
     if (!pyodide) return;
-    const userCode = editors.current[prob.id].getValue();
+    // Use persisted code for testing
+    const userCode = codes[prob.id];
     try {
-      // Prepare user test script, trimming whitespace
-      const script = prob.testScript(userCode).trim();
-      // Split into setup and final expression
-      const idx = script.lastIndexOf('\n');
-      const setupCode = idx >= 0 ? script.slice(0, idx) : '';
-      const lastLine = idx >= 0 ? script.slice(idx + 1) : script;
-      // Execute setup code (function definitions and test blocks)
-      if (setupCode) await pyodide.runPythonAsync(setupCode);
-      // Evaluate final JSON dump expression to get return value
-      const pyResult = pyodide.runPython(lastLine);
-      const resultStr = pyResult.toString();
-      const arr: TestResult[] = JSON.parse(resultStr);
-      setResults(s => ({ ...s, [prob.id]: arr }));
+      // Full test script including definitions and json.dumps at end
+      const script = prob.testScript(userCode);
+      const result = await pyodide.runPythonAsync(script);
+      const resultStr = result.toString();
+      const parsed = JSON.parse(resultStr);
+      const arr: TestResult[] = Array.isArray(parsed)
+        ? parsed
+        : Object.entries(parsed).map(([key, value]) => ({
+            test: key,
+            pass: true,
+            got: value
+          }));
+       setResults(s => ({ ...s, [prob.id]: arr }));
     } catch (e: any) {
-      setResults(s => ({ ...s, [prob.id]: [{ test: 'setup', pass: false, error: e.message }] }));
+      // Truncate error to last line
+      let msg = e.message || String(e);
+      const lines = msg.split('\n');
+      msg = lines[lines.length - 1];
+      setResults(s => ({
+        ...s,
+        [prob.id]: [{ test: 'runtime', pass: false, error: msg }]
+      }));
     }
   };
 
@@ -215,7 +348,8 @@ const SuperHardProblems: React.FC = () => {
               theme="github_light_default"
               name={`boss-${p.id}`}
               onLoad={ed => editors.current[p.id] = ed}
-              value={p.defaultCode}
+              value={codes[p.id]}
+              onChange={(val) => setCodes(s => ({ ...s, [p.id]: val }))}
               fontSize={14}
               width="100%"
               setOptions={{useWorker:false,maxLines:Infinity}}

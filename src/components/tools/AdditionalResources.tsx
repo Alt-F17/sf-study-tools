@@ -14,7 +14,7 @@ const AdditionalResources: React.FC = () => {
         </CardHeader>
         <CardContent>
           <p className="mb-4">
-            A few more tools to help you in your studies. (A very big thanks to [][][] for kindly lending their notes &lt;3)
+            A few more tools to help you in your studies. Good luck with your exams!
           </p>
           <p className="mb-4">Scroll down for more!</p>
         </CardContent>
@@ -50,12 +50,8 @@ const AdditionalResources: React.FC = () => {
         <CardContent>
           <ul className="list-disc pl-5 space-y-2">
             <li>A tool made by: Felix Egan (SF2 - W25)</li>
-            <li>[][][] for kindly sharing his notes</li>
-            <li>[][][], also for kindly sharing his notes</li>
             <li>Eric Mayhew and Louisa Harutyunya for their amazing teaching throughout semesters 1 and 2</li>
-            <li>Eric and Jacob for making Coding-Cat.club</li>
-            <li>The creators of VIM Adventures</li>
-            <li>The makers of GPT o4-mini, OpenAI</li>
+            <li>I may (or may not) have burnt an unfathomable amount of unrecoverable hours of sleep making this...</li>
           </ul>
         </CardContent>
       </Card>

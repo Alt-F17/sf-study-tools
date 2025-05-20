@@ -18,7 +18,7 @@ DONE: [X] Populate JSON: [X] Perfected
 - [X] "Spot the Bug" challenges with common Python errors
 DONE: [ ] Populate JSON: [ ] Perfected
 
-- [X] Super Duper Hard Python Problems
+- [ ] Super Duper Hard Python Problems
 DONE: [ ] Populate JSON: [ ] Perfected
 
 - [X] OOP class hierarchy diagram builder

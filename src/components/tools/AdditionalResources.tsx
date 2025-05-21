@@ -91,8 +91,14 @@ const AdditionalResources: React.FC = () => {
         <CardContent>
           <ul className="list-disc pl-5 space-y-2">
             <li>A tool made by: Felix Egan (SF2 - W25)</li>
-            <li>Eric Mayhew and Louisa Harutyunya for their amazing teaching throughout semesters 1 and 2</li>
-            <li>I may (or may not) have burnt an unfathomable amount of unrecoverable hours of sleep making this...</li>
+            <br />
+            <b>Many thanks to:</b>
+            <li>Eric Mayhew and Louisa Harutyunyan for their amazing teaching throughout semesters 1 and 2</li>
+            <li>Louisa Harutyunyan for the original concepTests (idk if I'm allowed to keep those actually... oh well)</li>
+            <li>Ke Yin for sharing his notes for all to use</li>
+            <br />
+            <Separator className="my-4" />
+            I may (or may not) have burnt an unfathomable amount of unrecoverable hours of sleep making this...
           </ul>
         </CardContent>
       </Card>

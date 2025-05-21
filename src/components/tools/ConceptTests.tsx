@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useToolsStore } from "@/store/toolsStore";
+import conceptTestsData from "@/data/conceptTests.json";
 
 interface ConceptTest {
   code: string;
@@ -15,32 +16,21 @@ const ConceptTests: React.FC = () => {
   const { conceptTestsState, updateConceptTestsState, initConceptTests } = useToolsStore();
   const { deckOrder, currentIndex, correctCount, wrongCount, answered } = conceptTestsState;
   
-  const [conceptTests] = useState<ConceptTest[]>([
-    {
-      code: `def foo(x):\n    return x * x\n\nprint(foo(5))`,
-      choices: ["5", "10", "25", "Error"],
-      correct: 2
-    },
-    {
-      code: `a = [1,2,3]\nb = a\nb.append(4)\nprint(a)`,
-      choices: ["[1,2,3]", "[1,2,3,4]", "[4]", "Error"],
-      correct: 1
-    }
-  ]);
+  const tests: ConceptTest[] = conceptTestsData as ConceptTest[];
 
   const [processedCodeLines, setProcessedCodeLines] = useState<string[]>([]);
   const [isCodeHighlighted, setIsCodeHighlighted] = useState(false);
 
-  const currentTest = deckOrder.length > 0 && currentIndex < deckOrder.length && conceptTests[deckOrder[currentIndex]]
-    ? conceptTests[deckOrder[currentIndex]]
+  const currentTest = deckOrder.length > 0 && currentIndex < deckOrder.length && tests[deckOrder[currentIndex]]
+    ? tests[deckOrder[currentIndex]]
     : null;
 
   // Initialize concept tests if needed
   useEffect(() => {
-    if (deckOrder.length === 0 && conceptTests.length > 0) {
-      initConceptTests(conceptTests.length);
+    if (deckOrder.length === 0 && tests.length > 0) {
+      initConceptTests(tests.length);
     }
-  }, [deckOrder.length, conceptTests.length, initConceptTests]);
+  }, [deckOrder.length, tests.length, initConceptTests]);
 
   // Process code for highlighting and line numbers
   useEffect(() => {
@@ -80,22 +70,20 @@ const ConceptTests: React.FC = () => {
   };
 
   const handlePrevious = () => {
-    if (currentIndex > 0) {
-      updateConceptTestsState({ currentIndex: currentIndex - 1 });
-    }
+    const prev = currentIndex > 0 ? currentIndex - 1 : deckOrder.length - 1;
+    updateConceptTestsState({ currentIndex: prev });
   };
 
   const handleNext = () => {
-    if (currentIndex < deckOrder.length - 1) {
-      updateConceptTestsState({ currentIndex: currentIndex + 1 });
-    }
+    const next = currentIndex < deckOrder.length - 1 ? currentIndex + 1 : 0;
+    updateConceptTestsState({ currentIndex: next });
   };
 
   const resetTests = () => {
-    initConceptTests(conceptTests.length);
+    initConceptTests(tests.length);
   };
 
-  const progress = conceptTests.length > 0 ? Math.round((Object.keys(answered).length / conceptTests.length) * 100) : 0;
+  const progress = tests.length > 0 ? Math.round((Object.keys(answered).length / tests.length) * 100) : 0;
 
   const lineNumberStyle: React.CSSProperties = {
     color: '#6b7280', // gray-500
@@ -159,7 +147,7 @@ const ConceptTests: React.FC = () => {
             <Progress value={progress} className="mb-4" />           
             <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
               <div>
-                <span>Completed: {Object.keys(answered).length} / {conceptTests.length}</span>
+                <span>Completed: {Object.keys(answered).length} / {tests.length}</span>
               </div>
               <div>
                 <span>Correct: {correctCount}</span>

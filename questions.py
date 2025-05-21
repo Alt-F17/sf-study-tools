@@ -3563,18 +3563,6 @@ def question_154():
     E) def rent_cost(self, days): return None
     """
 
-def question_155():
-    """
-    Consider a Book class with a read_time() method assuming 1 page per minute.
-    For a book with 310 pages, what is read_time()?
-
-    A) 310 minutes
-    B) 300 minutes
-    C) 320 minutes
-    D) 155 minutes
-    E) 620 minutes
-    """
-
 def question_156():
     """
     Given sorting algorithms with their worst-case time complexities:
@@ -3633,18 +3621,6 @@ def question_159():
     E) No change occurs
     """
 
-def question_160():
-    """
-    For an eProgression iterator estimating e (∑ 1/n!), what is the 5th term
-    after 6 iterations?
-
-    A) 2.6666666666
-    B) 2.7083333333
-    C) 2.5
-    D) 2.0
-    E) 1.0
-    """
-
 def question_161():
     """
     Given a dictionary of students and R scores, which QuickSort pivot choice
@@ -3655,38 +3631,4 @@ def question_161():
     C) Middle element
     D) Random element
     E) Median of three
-    """
-
-def question_162():
-    """
-    For a recursive Longest Common Prefix function on ["flower", "flow", "flight"],
-    what is the output?
-
-    A) "fl"
-    B) "flow"
-    C) "f"
-    D) "flo"
-    E) ""
-    """
-
-def question_163():
-    """
-    For EvenIterable with n=3, what is the sequence of outputs?
-
-    A) 2, 4, 6
-    B) 0, 2, 4
-    C) 4, 6, 8
-    D) 2, 4, 6, 8
-    E) 6, 4, 2
-    """
-
-def question_164():
-    """
-    For a factorials iterator from 0! to 5!, what is the sequence without switch?
-
-    A) 1, 1, 2, 6, 24, 120
-    B) 120, 24, 6, 2, 1, 1
-    C) 1, 2, 6, 24, 120, 720
-    D) 0, 1, 2, 6, 24, 120
-    E) 1, 1, 2, 6, 24, 0
     """

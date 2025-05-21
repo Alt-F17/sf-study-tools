@@ -33,7 +33,7 @@ const PlaceholderTool: React.FC = () => {
           </div>
           <h3 className="text-xl font-medium mb-2">This tool is under development</h3>
           <p className="text-center text-gray-500 mb-6">
-            We're working hard to bring this feature to you soon. Please check back later!
+            I swear, I'm working on it... I'm just a bit busy right now. Please check back later!
           </p>
         </div>
       </CardContent>

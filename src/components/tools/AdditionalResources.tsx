@@ -15,8 +15,49 @@ const AdditionalResources: React.FC = () => {
         <CardContent>
           <p className="mb-4">
             A few more tools to help you in your studies. Good luck with your exams!
+            <br />
+            <Separator className="my-4" />
+            <b>Things to know for the Final:</b>
+            <ul className="list-disc list-inside">
+                <li>Data Science Library (Pandas, Matplotlib, Numpy)</li>
+                <li>Debugging</li>
+                <li>2D lists, nested loops, referencing (pointers), tuples</li>
+                <li>List Comprehensions: map, filter</li>
+                <li>Dictionaries, nested dictionaries, sets</li>
+                <li>Exceptions, Files (you are expected to know the type of errors)</li>
+                <li>
+                Object / Classes
+                <ul className="list-disc list-inside ml-5">
+                  <li>basic classes + annotations</li>
+                  <li>containment (has-a)</li>
+                  <li>inheritance (is-a) (multiple inheritance)</li>
+                  <li>abstract classes</li>
+                  <li>polymorphism</li>
+                  <li>relational operators + total ordering + arithmetic operators</li>
+                  <li>iterators: __iter__</li>
+                  <li>iterable: __next__</li>
+                </ul>
+                </li>
+                <li>
+                Stacks ADT:
+                <ul className="list-disc list-inside ml-5">
+                  <li>push, pop, top, is_empty, repr, len</li>
+                </ul>
+                </li>
+                <li>Recursion</li>
+                <li>
+                Sorting & searching algorithms:
+                <ul className="list-disc list-inside ml-5">
+                  <li>selection sort</li>
+                  <li>merge sort</li>
+                  <li>quick sort</li>
+                  <li>insertion sort</li>
+                  <li>binary search</li>
+                  <li>bisect module</li>
+                </ul>
+                </li>
+            </ul>
           </p>
-          <p className="mb-4">Scroll down for more!</p>
         </CardContent>
       </Card>
 

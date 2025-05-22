@@ -106,7 +106,7 @@
   },
   {
     "code": "# What prints\n\ndef trickierAdd(x, y):\n    y += 2\n    trickiestAdd(x, y)\n    print(f'x + y = {x + y}')\n    return x + x + y\n\ndef trickiestAdd(x, y):\n    x += 4\n    print(f'x + y = {x + y}')\n\nx = 5\ny = 7\n\nprint(f'x + y = {trickierAdd(x, y)}')",
-    "choices": ["x + y = 14\nx + y = 21\nx + y = 18", "x + y = 18\nx + y = 21\nx + y = 14", "x + y = 21\nx + y = 18\nx + y = 14", "x + y = 21\nx + y = 14\nx + y = 18", "x + y = 18\nx + y = 21\nx + y = 14", "x + y = 18\nx + y = 14\nx + y = 21"],
+    "choices": ["x + y = 14\nx + y = 21\nx + y = 18", "x + y = 18\nx + y = 21\nx + y = 14", "x + y = 19\nx + y = 18\nx + y = 14", "x + y = 19\nx + y = 14\nx + y = 18", "x + y = 18\nx + y = 19\nx + y = 14", "x + y = 18\nx + y = 14\nx + y = 19"],
     "correct": 5
   },
   {

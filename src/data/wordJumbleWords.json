@@ -138,10 +138,10 @@
   {"word": "polymorphism", "hint": "The ability of different objects to be accessed through the same interface"},
   {"word": "inheritance", "hint": "A mechanism where a new class can inherit properties and methods from an existing class"},
   {"word": "encapsulation", "hint": "The bundling of data with the methods that operate on that data"},
-  {"word": "__private_variable", "hint": "A convention to indicate that a variable is intended for internal use only"},
-  {"word": "__private_method", "hint": "A convention to indicate that a method is intended for internal use only"},
-  {"word": "_protected_variable", "hint": "A convention to indicate that a variable is intended for use within the class and its subclasses"},
-  {"word": "_protected_method", "hint": "A convention to indicate that a method is intended for use within the class and its subclasses"},
+  {"word": "__privateVariable", "hint": "A convention to indicate that a variable is intended for internal use only"},
+  {"word": "__privateMethod", "hint": "A convention to indicate that a method is intended for internal use only"},
+  {"word": "_protectedVariable", "hint": "A convention to indicate that a variable is intended for use within the class and its subclasses"},
+  {"word": "_protectedMethod", "hint": "A convention to indicate that a method is intended for use within the class and its subclasses"},
   {"word": "total_ordering", "hint": "A class decorator that fills in missing ordering methods"},
   {"word": "pointer", "hint": "A variable that stores the memory address of another variable"}
 ]

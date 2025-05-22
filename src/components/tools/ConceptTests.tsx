@@ -79,6 +79,16 @@ const ConceptTests: React.FC = () => {
     updateConceptTestsState({ currentIndex: next });
   };
 
+  // Keyboard shortcuts: left/right arrows for navigation
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') handlePrevious();
+      else if (e.key === 'ArrowRight') handleNext();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [currentIndex, deckOrder.length]);
+
   const resetTests = () => {
     initConceptTests(tests.length);
   };
@@ -104,7 +114,7 @@ const ConceptTests: React.FC = () => {
         
         {currentTest && deckOrder.length > 0 ? (
           <>
-            <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6 overflow-auto max-h-60">
+            <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6">
               <pre className="font-mono text-sm whitespace-pre-wrap">
                 <code>
                   {processedCodeLines.map((line, idx) => (

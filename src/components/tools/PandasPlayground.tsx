@@ -107,7 +107,7 @@ const PandasPlayground: React.FC = () => {
             <div className="text-sm font-semibold mb-1">grades.csv (oh, and Oliver's grade got increased cuz he asked me very nicely)</div>
             <pre className="bg-gray-50 p-2 rounded text-sm whitespace-pre-wrap">
             {`   `}<u>{`Student`}</u>{`      `}<u>{`Grade`}</u>{`   `}<u>{`Age`}</u>{`   `}<u>{`Class`}</u>{`          `}<u>{`Credits`}</u>{`   `}<u>{`Attendance%`}</u>{`
-0  Alice          85     20   Physics             45     92
+0  Alex           85     20   Physics             45     92
 1  Bob            92     21   Mathematics         60     98
 2  Charlie        78     19   Computer Science    30     88
 3  Diana          88     22   Biology             75     95

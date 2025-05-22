@@ -275,7 +275,7 @@ const OOPDiagram: React.FC = () => {
         </div>
       </div>
       <Card>
-        <CardHeader><CardTitle>OOP Inheritance Diagram (Incomplete...)</CardTitle></CardHeader>
+        <CardHeader><CardTitle>OOP Inheritance Diagram (One class per file, sorry formating is... weird...)</CardTitle></CardHeader>
         <CardContent>
           <AceEditor
             mode="python"

@@ -28,7 +28,7 @@ const Index = () => {
     { id: "stack-queue", name: "Stack or Queue?", component: StackOrQueue },
     { id: "pandas-playground", name: "Pandas and Matplotlib", component: PandasPlayground },
     { id: "spot-bug", name: "Spot the Bug [WIP]", component: PlaceholderTool },
-    { id: "list-pattern", name: "Final Boss Problems [WIP]", component: PlaceholderTool },
+    { id: "list-pattern", name: "Final Boss Problems", component: SuperHardProblems },
     { id: "oop-diagram", name: "OOP Inheritance Diagram", component: OOPDiagram },
     { id: "sort-animator", name: "Step-by-Step Animator", component: StepByStepAnimator },
     { id: "complexity-calc", name: "Complexity Calculator", component: ComplexityCalc },

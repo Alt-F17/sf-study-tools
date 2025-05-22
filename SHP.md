@@ -164,7 +164,7 @@ except (FileNotFoundError, InvalidDataError) as e:
     print(f"Error: {e}")
 ```
 
-#### Problem 3: The Temperature Grid Analyzer
+#### Problem 3: Broken Weather Stations
 **Concepts Covered**: 2D Lists, Nested Loops, Tuples, List Comprehensions, Filter, Sets, Exceptions
 
 **Scenario**: You are a climate scientist analyzing temperature data from a grid of weather stations. The data is represented as a 2D list, where each cell contains a temperature (float) or `None` (missing data). Your task is to perform various analyses on this grid.
@@ -230,7 +230,7 @@ print("Above Avg:", above_average(grid))
 print("Unique Temps:", unique_temperatures(grid))
 ```
 
-#### Problem 4: The Math Expression Evaluator
+#### Problem 4: Python Is Just a Calculator
 **Concepts Covered**: OOP (abstract classes, inheritance, polymorphism), Recursion, Exceptions
 
 **Scenario**: You are building a calculator for a math tutoring app. The app needs to evaluate mathematical expressions with nested parentheses, such as "(2 + (3 * 4))". You must design a system to parse and evaluate these expressions.
@@ -306,65 +306,5 @@ try:
     expr = parse_expression("(10 / 0)")
     print(expr.evaluate())  # Raises ValueError
 except ValueError as e:
-    print(f"Error: {e}")
-```
-
-#### Problem 5: The Student Grade Manager
-**Concepts Covered**: Files, Dictionaries, Exceptions, List Comprehensions
-
-**Scenario**: You are developing a grade management system for a school. The system reads student grades from a text file and performs various operations.
-
-**Tasks**:
-1. Read a file `grades.txt` containing student names and scores, one per line, in the format "Name: score" (e.g., "Alice: 85").
-2. Store the data in a dictionary where keys are names and values are scores (as integers).
-3. Handle errors:
-   - If the file does not exist, raise `FileNotFoundError`.
-   - If a line is malformed, skip it and log the issue.
-   - If there are duplicate names, raise `ValueError` after reading all lines.
-4. Find the student with the highest score.
-5. Write the dictionary back to a new file `sorted_grades.txt`, sorted by name.
-
-**Solution**:
-```python
-def read_grades(filename):
-    data = {}
-    duplicates = []
-    try:
-        with open(filename, 'r') as f:
-            for line in f:
-                try:
-                    name, score_str = line.strip().split(':')
-                    name = name.strip()
-                    score = int(score_str.strip())
-                    if name in data:
-                        if name not in duplicates:
-                            duplicates.append(name)
-                    else:
-                        data[name] = score
-                except ValueError:
-                    print(f"Malformed line: {line.strip()}")
-        if duplicates:
-            raise ValueError(f"Duplicate names found: {', '.join(duplicates)}")
-        return data
-    except FileNotFoundError:
-        raise FileNotFoundError(f"File {filename} not found")
-
-def find_highest_score(grades):
-    if not grades:
-        return None
-    return max(grades, key=grades.get)
-
-def write_sorted_grades(grades, output_file):
-    with open(output_file, 'w') as f:
-        for name in sorted(grades.keys()):
-            f.write(f"{name}: {grades[name]}\n")
-
-# Example Usage
-try:
-    grades = read_grades('grades.txt')
-    print("Grades:", grades)
-    print("Highest Scorer:", find_highest_score(grades))
-    write_sorted_grades(grades, 'sorted_grades.txt')
-except (FileNotFoundError, ValueError) as e:
     print(f"Error: {e}")
 ```

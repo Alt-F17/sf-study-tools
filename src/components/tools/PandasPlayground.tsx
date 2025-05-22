@@ -104,7 +104,7 @@ const PandasPlayground: React.FC = () => {
         <CardContent>
           {/* Preview of CSV file */}
           <div className="mb-4">
-            <div className="text-sm font-semibold mb-1">grades.csv</div>
+            <div className="text-sm font-semibold mb-1">grades.csv (oh, and Oliver's grade got increased cuz he asked me very nicely)</div>
             <pre className="bg-gray-50 p-2 rounded text-sm whitespace-pre-wrap">
             {`   `}<u>{`Student`}</u>{`      `}<u>{`Grade`}</u>{`   `}<u>{`Age`}</u>{`   `}<u>{`Class`}</u>{`          `}<u>{`Credits`}</u>{`   `}<u>{`Attendance%`}</u>{`
 0  Alice          85     20   Physics             45     92

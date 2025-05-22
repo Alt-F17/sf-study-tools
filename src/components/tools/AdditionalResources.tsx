@@ -96,6 +96,7 @@ const AdditionalResources: React.FC = () => {
             <li>Eric Mayhew and Louisa Harutyunyan for their amazing teaching throughout semesters 1 and 2</li>
             <li>Louisa Harutyunyan for the original concepTests (idk if I'm allowed to keep those actually... oh well)</li>
             <li>Ke Yin for sharing his notes for all to use</li>
+            <li>Evan Luo for also sharing his notes!</li>
             <br />
             <Separator className="my-4" />
             I may (or may not) have burnt an unfathomable amount of unrecoverable hours of sleep making this...

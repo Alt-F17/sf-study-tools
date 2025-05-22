@@ -121,7 +121,7 @@ const PandasPlayground: React.FC = () => {
 11 Laura          81     20   Mathematics         58     91
 12 Michael        87     21   Computer Science    65     94
 13 Noah           90     22   Biology             72     98
-14 Oliver         79     19   Economics           33     89
+14 Oliver         99     19   Economics           33     89
 15 Paul           93     23   Physics             66     97
 16 Quandale       84     20   Mathematics         53     92
 17 Rachel         77     21   Computer Science    47     87

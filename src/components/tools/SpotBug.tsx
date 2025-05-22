@@ -16,6 +16,7 @@ interface BugProblem {
 const SpotBug: React.FC = () => {
   const { spotBugState, updateSpotBugState, initSpotBug } = useToolsStore();
   const { deckOrder, currentIndex, correctCount, wrongCount, answered } = spotBugState;
+  deckOrder.sort((a, b) => a - b);  // disable randomization of problems ~~ delete this line if you want to randomize the problems
   
   // Remove inline state for bugProblems
   const bugProblems: BugProblem[] = spotBugProblemsData as BugProblem[];
@@ -61,13 +62,22 @@ const SpotBug: React.FC = () => {
   // Keyboard event handler for up/down arrow keys
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (answered[currentIndex]) return; 
+      if ((e.key === "ArrowUp" || e.key === "ArrowDown") && answered[currentIndex]) return;
       if (e.key === "ArrowUp") {
         e.preventDefault();
         setSelectedLine(prev => Math.max(1, prev - 1));
       } else if (e.key === "ArrowDown") {
         e.preventDefault();
         setSelectedLine(prev => Math.min(lineCount, prev + 1));
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handlePrevious();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        handleNext();
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        handleSubmit();
       }
     };
 

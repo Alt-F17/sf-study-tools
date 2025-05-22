@@ -138,7 +138,7 @@ const ConceptTests: React.FC = () => {
                       hasAnswered && !isCorrectChoice && answered[currentIndex] && "bg-red-100 border-red-500 text-red-800"
                     )}
                   >
-                    {choice}
+                    <pre className="m-0 whitespace-pre-wrap font-mono">{choice}</pre>
                   </Button>
                 );
               })}

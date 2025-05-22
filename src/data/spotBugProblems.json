@@ -1,22 +1,22 @@
 [
   {
-    "code": "def calculate_average(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total / len(numbers)",
+    "code": "def calculate_average(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total / len(numbers)\n\nprint(calculate_average([]))",
     "bugLine": 5,
     "bugDescription": "ZeroDivisionError: Division by zero occurs if an empty list is passed, as len(numbers) will be 0."
   },
   {
-    "code": "def remove_duplicates(items):\n    result = []\n    for item in items:\n        if item not in result:\n            result.append(item)\n    return results",
+    "code": "def remove_duplicates(items):\n    result = []\n    for item in items:\n        if item not in result:\n            result.append(item)\n    return results\n\nprint(remove_duplicates([1, 2, 2, 3]))",
     "bugLine": 6,
     "bugDescription": "NameError: The variable 'results' is referenced before assignment (typo, should be 'result')."
   },
   {
-    "code": "numbers = [1, 2, 3]\nprint(numbers[3])",
+    "code": "numbers = [1, 2, 3]\nnumbers[len(numbers)] = 4\nprint(numbers)",
     "bugLine": 2,
     "bugDescription": "IndexError: list index out of range because the list has only three elements (indices 0-2)."
   },
   {
-    "code": "text = 'Hello' + 5\nprint(text)",
-    "bugLine": 1,
+    "code": "def concat(elem1, elem2):\n    return elem1 + elem2\n\nprint(concat('Hello', 5))",
+    "bugLine": 2,
     "bugDescription": "TypeError: can only concatenate str (not \"int\") to str"
   },
   {
@@ -25,49 +25,34 @@
     "bugDescription": "NameError: name 'unknown_var' is not defined"
   },
   {
-    "code": "result = 10 / 0\nprint(result)",
-    "bugLine": 1,
-    "bugDescription": "ZeroDivisionError: division by zero"
-  },
-  {
-    "code": "d = {'x': 10}\nprint(d['y'])",
+    "code": "def dictprint(d, y, z='x'):\n    return d[z]\n\nprint(dictprint({'y': 1, 'z': 2}, 'y', 'x'))",
     "bugLine": 2,
-    "bugDescription": "KeyError: 'y'"
+    "bugDescription": "KeyError: 'x'"
   },
   {
-    "code": "lst = [1, 2]\nlst.append_method(3)",
-    "bugLine": 2,
-    "bugDescription": "AttributeError: 'list' object has no attribute 'append_method'"
+    "code": "my_list = [1, 2, 3]\nmy_set = {1, 2, 3}\nmy_set.add(4)\nmy_list.add(4)\nprint(my_list)\nprint(my_set)",
+    "bugLine": 4,
+    "bugDescription": "AttributeError: 'list' object has no attribute 'add'"
   },
   {
-    "code": "num = int('abc')\nprint(num)",
-    "bugLine": 1,
-    "bugDescription": "ValueError: invalid literal for int() with base 10: 'abc'"
+    "code": "num = 49\nroot_exp = num ** 0.5\nroot_sqrt = math.sqrt(num)\nprint(root_exp == root_sqrt)",
+    "bugLine": 3,
+    "bugDescription": "NameError: name 'math' is not defined (missing import statement for math module)"
   },
   {
-    "code": "def func()\n    return 1",
+    "code": "def fibonacci(n)\n    if n < 0: return 'Incorrect input'\n    a, b = 0, 1\n    for _ in range(n): a, b = b, a + b\n    return a\n\nprint(fibonacci(5))",
     "bugLine": 1,
     "bugDescription": "SyntaxError: invalid syntax (missing colon after function definition)"
   },
   {
-    "code": "if True:\nprint('Oops')",
-    "bugLine": 2,
-    "bugDescription": "IndentationError: expected an indented block"
+    "code": "try:\n    if True:\n        print('Try\\nThis?')\n    if 1:print('Or\\nThis')\n    if 'false':print('Or');print('This')\n    elif [1]:print('Or give up...')\n",
+    "bugLine": 7,
+    "bugDescription": "SyntaxError: expected 'except' or 'finally' block"
   },
   {
-    "code": "def greet(name):\n    return f'Hi, {name}'",
-    "bugLine": 3,
-    "bugDescription": "TypeError: greet() missing 1 required positional argument: 'name'"
-  },
-  {
-    "code": "empty = []\nprint(empty[0])",
-    "bugLine": 2,
-    "bugDescription": "IndexError: list index out of range"
-  },
-  {
-    "code": "data = {}\nprint(data['key'])",
-    "bugLine": 2,
-    "bugDescription": "KeyError: 'key'"
+    "code": "def multiply(a, b=1):\n    return a * b\n\nprint(multiply(5, 2, 3))",
+    "bugLine": 4,
+    "bugDescription": "TypeError: multiply() takes from 1 to 2 positional arguments but 3 were given"
   },
   {
     "code": "class Test:\n    pass\nobj = Test()\nobj.missing",
@@ -75,34 +60,9 @@
     "bugDescription": "AttributeError: 'Test' object has no attribute 'missing'"
   },
   {
-    "code": "print(x)\nx = 10",
-    "bugLine": 1,
-    "bugDescription": "NameError: name 'x' is not defined"
-  },
-  {
-    "code": "value = 42\nvalue()",
-    "bugLine": 2,
-    "bugDescription": "TypeError: 'int' object is not callable"
-  },
-  {
-    "code": "a = 5\nb = 0\nprint(a / b)",
-    "bugLine": 3,
-    "bugDescription": "ZeroDivisionError: division by zero"
-  },
-  {
     "code": "x, y = [1, 2, 3]",
     "bugLine": 1,
     "bugDescription": "ValueError: too many values to unpack (expected 2)"
-  },
-  {
-    "code": "lst = [1, 2]\nprint(lst[-3])",
-    "bugLine": 2,
-    "bugDescription": "IndexError: list index out of range"
-  },
-  {
-    "code": "d = {'k': 1}\nd.pop('k')\nprint(d['k'])",
-    "bugLine": 3,
-    "bugDescription": "KeyError: 'k'"
   },
   {
     "code": "s = 'text'\ns[1] = 'a'",
@@ -110,134 +70,14 @@
     "bugDescription": "TypeError: 'str' object does not support item assignment"
   },
   {
-    "code": "def func():\n    print(local_var)",
-    "bugLine": 2,
-    "bugDescription": "NameError: name 'local_var' is not defined"
-  },
-  {
     "code": "[10 / x for x in [2, 1, 0]]",
     "bugLine": 1,
     "bugDescription": "ZeroDivisionError: division by zero"
   },
   {
-    "code": "import math\nx = float('nan')\nint(x)",
-    "bugLine": 3,
-    "bugDescription": "ValueError: cannot convert float NaN to integer"
-  },
-  {
-    "code": "t = (1, 2)\nprint(t[2])",
-    "bugLine": 2,
-    "bugDescription": "IndexError: tuple index out of range"
-  },
-  {
-    "code": "d = {'a': 1}\nprint(d['b'])",
-    "bugLine": 2,
-    "bugDescription": "KeyError: 'b'"
-  },
-  {
     "code": "x = None\nx.upper()",
     "bugLine": 2,
     "bugDescription": "AttributeError: 'NoneType' object has no attribute 'upper'"
-  },
-  {
-    "code": "lst = [1, 2]\nresult = lst + 3",
-    "bugLine": 2,
-    "bugDescription": "TypeError: can only concatenate list (not \"int\") to list"
-  },
-  {
-    "code": "def div(x, y):\n    return x / y\n\nprint(div(10, 0))",
-    "bugLine": 2,
-    "bugDescription": "ZeroDivisionError: division by zero"
-  },
-  {
-    "code": "s = '123'\nprint(f'{s:x}')",
-    "bugLine": 2,
-    "bugDescription": "ValueError: Unknown format code 'x' for object of type 'str'"
-  },
-  {
-    "code": "s = 'hi'\nprint(s[2])",
-    "bugLine": 2,
-    "bugDescription": "IndexError: string index out of range"
-  },
-  {
-    "code": "d = {'x': 1}\nd.pop('x')\nprint(d['x'])",
-    "bugLine": 3,
-    "bugDescription": "KeyError: 'x'"
-  },
-  {
-    "code": "import math\nmath.unknown",
-    "bugLine": 2,
-    "bugDescription": "AttributeError: module 'math' has no attribute 'unknown'"
-  },
-  {
-    "code": "d = {'a': 1}\nd[0] = 2",
-    "bugLine": 2,
-    "bugDescription": "TypeError: 'dict' object does not support item assignment with integer keys (this is valid syntax but conceptually a misuse)"
-  },
-  {
-    "code": "def test():\n    print(y)",
-    "bugLine": 2,
-    "bugDescription": "NameError: name 'y' is not defined"
-  },
-  {
-    "code": "for i in range(2):\n    if i == 1:\n        print(1 / 0)",
-    "bugLine": 3,
-    "bugDescription": "ZeroDivisionError: division by zero"
-  },
-  {
-    "code": "a, b = [1]",
-    "bugLine": 1,
-    "bugDescription": "ValueError: not enough values to unpack (expected 2, got 1)"
-  },
-  {
-    "code": "lst = [1, 2, 3]\nprint(lst[4])",
-    "bugLine": 2,
-    "bugDescription": "IndexError: list index out of range"
-  },
-  {
-    "code": "d = {}\nprint(d['x'])",
-    "bugLine": 2,
-    "bugDescription": "KeyError: 'x'"
-  },
-  {
-    "code": "x = 'test'\nx[0] = 'T'",
-    "bugLine": 2,
-    "bugDescription": "TypeError: 'str' object does not support item assignment"
-  },
-  {
-    "code": "lst = [1, 2]\nlst[-3]",
-    "bugLine": 2,
-    "bugDescription": "IndexError: list index out of range"
-  },
-  {
-    "code": "x = None\nx.method()",
-    "bugLine": 2,
-    "bugDescription": "AttributeError: 'NoneType' object has no attribute 'method'"
-  },
-  {
-    "code": "a = [1]\na + 2",
-    "bugLine": 2,
-    "bugDescription": "TypeError: can only concatenate list (not \"int\") to list"
-  },
-  {
-    "code": "def calc(x):\n    return x / 0",
-    "bugLine": 2,
-    "bugDescription": "ZeroDivisionError: division by zero"
-  },
-  {
-    "code": "num = int('xyz')",
-    "bugLine": 1,
-    "bugDescription": "ValueError: invalid literal for int() with base 10: 'xyz'"
-  },
-  {
-    "code": "s = 'hello'\ns[5]",
-    "bugLine": 2,
-    "bugDescription": "IndexError: string index out of range"
-  },
-  {
-    "code": "d = {'k': 1}\nd.pop('k')\nd['k']",
-    "bugLine": 3,
-    "bugDescription": "KeyError: 'k'"
   },
   {
     "code": "class Example:\n    pass\ne = Example()\ne.no_attr",

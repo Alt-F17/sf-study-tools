@@ -27,7 +27,7 @@ const Index = () => {
     { id: "concept-test", name: "SF2 ConcepTests", component: ConceptTests },
     { id: "stack-queue", name: "Stack or Queue?", component: StackOrQueue },
     { id: "pandas-playground", name: "Pandas and Matplotlib", component: PandasPlayground },
-    { id: "spot-bug", name: "Spot the Bug [WIP]", component: SpotBug },
+    { id: "spot-bug", name: "Spot the Bug", component: SpotBug },
     { id: "list-pattern", name: "Final Boss Problems", component: SuperHardProblems },
     { id: "oop-diagram", name: "OOP Inheritance Diagram", component: OOPDiagram },
     { id: "sort-animator", name: "Step-by-Step Animator", component: StepByStepAnimator },

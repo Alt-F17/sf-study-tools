@@ -237,11 +237,10 @@
       "12 13",
       "12 13\nPerhaps better poetry will be written in...",
       "Perhaps better poetry will be written in...",
-      "",
       "12 13\nPerhaps better poetry will be written in...\\n",
       "This code produces an error."
     ],
-    "correct": 3
+    "correct": 1
   },
   {
     "code": "# Let book.txt have the following 2 lines:\n# 12 13\n# Perhaps better poetry will be written in...\n# After the execution of the code below, what prints?\ntxt_file = open('book.txt', 'r')\nline = txt_file.readline()\nwhile line != '':\n    line = txt_file.readline()\n    print(line.rstrip())\ntxt_file.close()",
@@ -249,11 +248,10 @@
       "Perhaps better poetry will be written in...\\n",
       "12 13\nPerhaps better poetry will be written in...",
       "12 13",
-      "",
       "Perhaps better poetry will be written in...",
       "This code produces an error."
     ],
-    "correct": 0
+    "correct": 2
   },
   {
     "code": "# Let book.txt have the following 2 lines:\n# 12 13\n# Perhaps better poetry will be written in...\n# After the execution of the code below, what prints?\ntxt_file = open('book.txt', 'r')\nline = txt_file.readline()\nwhile line != '':\n    print(line.rstrip())\n    line = txt_file.readline()\ntxt_file.close()",
@@ -262,7 +260,6 @@
       "12 13\nPerhaps better poetry will be written in...\\n",
       "Perhaps better poetry will be written in...",
       "12 13",
-      "",
       "This code produces an error."
     ],
     "correct": 0

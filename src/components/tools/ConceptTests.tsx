@@ -4,19 +4,23 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useToolsStore } from "@/store/toolsStore";
-import conceptTestsData from "@/data/conceptTests.json";
 
-interface ConceptTest {
+export interface ConceptTest {
   code: string;
   choices: string[];
   correct: number;
+  language?: string;
 }
 
-const ConceptTests: React.FC = () => {
+interface ConceptTestsProps {
+  data: ConceptTest[];
+}
+
+const ConceptTests: React.FC<ConceptTestsProps> = ({ data }) => {
   const { conceptTestsState, updateConceptTestsState, initConceptTests } = useToolsStore();
   const { deckOrder, currentIndex, correctCount, wrongCount, answered } = conceptTestsState;
   
-  const tests: ConceptTest[] = conceptTestsData as ConceptTest[];
+  const tests: ConceptTest[] = data;
 
   const [processedCodeLines, setProcessedCodeLines] = useState<string[]>([]);
   const [isCodeHighlighted, setIsCodeHighlighted] = useState(false);
@@ -25,9 +29,9 @@ const ConceptTests: React.FC = () => {
     ? tests[deckOrder[currentIndex]]
     : null;
 
-  // Initialize concept tests if needed
+  // Initialize concept tests if needed or if data length changed
   useEffect(() => {
-    if (deckOrder.length === 0 && tests.length > 0) {
+    if (tests.length > 0 && (deckOrder.length === 0 || deckOrder.length !== tests.length)) {
       initConceptTests(tests.length);
     }
   }, [deckOrder.length, tests.length, initConceptTests]);
@@ -36,9 +40,17 @@ const ConceptTests: React.FC = () => {
   useEffect(() => {
     if (currentTest?.code) {
       if (typeof window !== "undefined" && (window as any).hljs) {
-        const highlightedHTML = (window as any).hljs.highlight(currentTest.code, { language: 'python', ignoreIllegals: true }).value;
-        setProcessedCodeLines(highlightedHTML.split('\n'));
-        setIsCodeHighlighted(true);
+        const lang = currentTest.language || 'python';
+        try {
+          const highlightedHTML = (window as any).hljs.highlight(currentTest.code, { language: lang, ignoreIllegals: true }).value;
+          setProcessedCodeLines(highlightedHTML.split('\n'));
+          setIsCodeHighlighted(true);
+        } catch (e) {
+          // Fallback if language not found or error
+          console.warn(`Highlighting failed for language: ${lang}`, e);
+          setProcessedCodeLines(currentTest.code.split('\n'));
+          setIsCodeHighlighted(false);
+        }
       } else {
         setProcessedCodeLines(currentTest.code.split('\n'));
         setIsCodeHighlighted(false);
@@ -47,7 +59,7 @@ const ConceptTests: React.FC = () => {
       setProcessedCodeLines([]);
       setIsCodeHighlighted(false);
     }
-  }, [currentTest?.code]);
+  }, [currentTest?.code, currentTest?.language]);
 
 
   const handleAnswer = (choiceIndex: number) => {
@@ -107,13 +119,16 @@ const ConceptTests: React.FC = () => {
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle>SF2 ConcepTests</CardTitle>
+        <CardTitle>SF ConcepTests</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="mb-4">All of Louisa's ConceptTests all in one place! Can you solve them all?</p>
+        <p className="mb-4">ConceptTests that I made way too slowly... Solve em all?</p>
         
         {currentTest && deckOrder.length > 0 ? (
           <>
+            <div className="mb-2 text-sm font-medium text-gray-500">
+              Question {currentIndex + 1} / {tests.length}
+            </div>
             <div className="bg-gray-900 text-gray-100 rounded-lg p-4 mb-6">
               <pre className="font-mono text-sm whitespace-pre-wrap">
                 <code>
@@ -173,7 +188,6 @@ const ConceptTests: React.FC = () => {
       <CardFooter className="flex justify-between">
         <Button 
           onClick={handlePrevious} 
-          disabled={currentIndex === 0}
           variant="outline"
         >
           &lt; Previous
@@ -183,7 +197,6 @@ const ConceptTests: React.FC = () => {
         </Button>
         <Button 
           onClick={handleNext}
-          disabled={currentIndex >= deckOrder.length - 1 || deckOrder.length === 0}
           variant="outline"
         >
           Next &gt;

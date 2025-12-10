@@ -23,7 +23,7 @@ const SF1Tools: React.FC = () => {
       <CardContent>
         <iframe
           ref={iframeRef}
-          src="./sf1/sf1-study-tools.html"
+          src="/sf1/sf1-study-tools.html"
           title="SF1 Study Tools"
           className="w-full h-[calc(100vh-6rem)] border-none"
         />

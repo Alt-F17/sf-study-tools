@@ -1,75 +1,67 @@
-import { useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import MainLayout from "@/components/layouts/MainLayout";
-import WordJumble from "@/components/tools/WordJumble";
-import Flashcards from "@/components/tools/Flashcards";
-import ConceptTests from "@/components/tools/ConceptTests";
-import PythonTerminal from "@/components/tools/PythonTerminal";
-import AdditionalResources from "@/components/tools/AdditionalResources";
-import PlaceholderTool from "@/components/tools/PlaceholderTool";
-import SpotBug from "@/components/tools/SpotBug";
-import StepByStepAnimator from "@/components/tools/StepByStepAnimator";
-import StackOrQueue from "@/components/tools/StackOrQueue";
-import SuperHardProblems from "@/components/tools/SuperHardProblems";
-import { useToolsStore } from "@/store/toolsStore";
-import PandasPlayground from "@/components/tools/PandasPlayground";
-import PythonMindMap from "@/components/tools/PythonMindMap";
-import SF1Tools from "@/components/tools/SF1Tools";
-import ComplexityCalc from "@/components/tools/ComplexityCalc";
-import OOPDiagram from "@/components/tools/OOPDiagram";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
-  const { activeTool, setActiveTool } = useToolsStore();
-
-  const tools = [
-    { id: "word-jumble", name: "Word Jumble", component: WordJumble },
-    { id: "flashcards", name: "SF2 Flashcards", component: Flashcards },
-    { id: "concept-test", name: "SF2 ConcepTests", component: ConceptTests },
-    { id: "stack-queue", name: "Stack or Queue?", component: StackOrQueue },
-    { id: "pandas-playground", name: "Pandas and Matplotlib", component: PandasPlayground },
-    { id: "spot-bug", name: "Spot the Bug", component: SpotBug },
-    { id: "list-pattern", name: "Final Boss Problems", component: SuperHardProblems },
-    { id: "oop-diagram", name: "OOP Inheritance Diagram", component: OOPDiagram },
-    { id: "sort-animator", name: "Step-by-Step Animator", component: StepByStepAnimator },
-    { id: "complexity-calc", name: "Complexity Calculator", component: ComplexityCalc },
-    { id: "py-terminal", name: "Python Terminal + File I/O", component: PythonTerminal },
-    { id: "concept-map", name: "Python Concept Map", component: PythonMindMap },
-    { id: "additional-resources", name: "A few more Tools...", component: AdditionalResources },
-    { id: "sf1-tools", name: "SF1 Study Tools", component: SF1Tools },
-  ];
-
-  // Find the selected tool
-  const selectedTool = tools.find((tool) => tool.id === activeTool);
-  const ToolComponent = selectedTool?.component || null;
+  const navigate = useNavigate();
 
   return (
-    <MainLayout
-      tools={tools}
-      activeTool={activeTool}
-      onToolSelect={(toolId) => setActiveTool(toolId)}
-    >
-      {!activeTool && (
-        <div className="flex flex-col items-center justify-center h-[80vh]">
-          <h1 className="text-4xl font-bold mb-6">SF2 Study Tools</h1>
-          <p className="text-xl text-gray-600 mb-8">Select a tool from the sidebar to get started</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-4xl">
-            {tools.slice(0, 6).map((tool) => (
-              <Card 
-                key={tool.id} 
-                className="hover:shadow-lg transition-all cursor-pointer"
-                onClick={() => setActiveTool(tool.id)}
-              >
-                <CardContent className="p-6 flex flex-col items-center justify-center h-32">
-                  <h2 className="font-medium text-lg">{tool.name}</h2>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col items-center justify-center p-4">
+      <div className="max-w-5xl w-full space-y-12">
+        <div className="text-center space-y-4">
+          <h1 className="text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">
+            SF-Study-Tools
+          </h1>
+          <p className="text-2xl text-muted-foreground font-light">
+            Random tools that Felix made instead of sleeping...
+          </p>
         </div>
-      )}
-      
-      {activeTool && ToolComponent && <ToolComponent />}
-    </MainLayout>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* SF1 */}
+          <Card className="hover:shadow-xl transition-all cursor-pointer border-t-4 border-t-sky-400 h-full flex flex-col" onClick={() => window.location.href = '/sf1/sf1-study-tools.html'}>
+            <CardHeader>
+              <CardTitle className="text-2xl text-sky-600">SF1</CardTitle>
+              <CardDescription>Introduction to Programming</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow flex flex-col justify-between">
+              <p className="text-sm text-muted-foreground mb-6">
+                Basic Python, Logic, and Algorithms.
+              </p>
+              <Button className="w-full bg-sky-500 hover:bg-sky-600 text-white">Open SF1 Tools</Button>
+            </CardContent>
+          </Card>
+
+          {/* SF2 */}
+          <Card className="hover:shadow-xl transition-all cursor-pointer border-t-4 border-t-blue-600 h-full flex flex-col" onClick={() => navigate('/sf2')}>
+            <CardHeader>
+              <CardTitle className="text-2xl text-blue-700">SF2</CardTitle>
+              <CardDescription>Data Structures & Algorithms</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow flex flex-col justify-between">
+              <p className="text-sm text-muted-foreground mb-6">
+                OOP, Complexity, Stacks, Queues, and more.
+              </p>
+              <Button className="w-full bg-blue-600 hover:bg-blue-700">Open SF2 Tools</Button>
+            </CardContent>
+          </Card>
+
+          {/* SF3 */}
+          <Card className="hover:shadow-xl transition-all cursor-pointer border-t-4 border-t-emerald-600 h-full flex flex-col" onClick={() => navigate('/sf3')}>
+            <CardHeader>
+              <CardTitle className="text-2xl text-emerald-700">SF3</CardTitle>
+              <CardDescription>Program Development in a Graphical Environment</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow flex flex-col justify-between">
+              <p className="text-sm text-muted-foreground mb-6">
+                Javascript, HTML, CSS and Flask.
+              </p>
+              <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">Open SF3 Tools</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
   );
 };
 

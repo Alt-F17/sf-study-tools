@@ -5,18 +5,21 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useToolsStore } from "@/store/toolsStore";
-import wordsData from '@/data/wordJumbleWords.json';
 
-interface JumbleWord {
+export interface JumbleWord {
   word: string;
   hint: string;
 }
 
-const WordJumble: React.FC = () => {
+interface WordJumbleProps {
+  data: JumbleWord[];
+}
+
+const WordJumble: React.FC<WordJumbleProps> = ({ data }) => {
   const { wordJumbleState, updateWordJumbleState, initWordJumble } = useToolsStore();
   const { deckOrder, currentIndex, mistakes } = wordJumbleState;
   
-  const words: JumbleWord[] = wordsData as JumbleWord[];
+  const words: JumbleWord[] = data;
 
   const [guess, setGuess] = useState("");
   const [scrambledWord, setScrambledWord] = useState("");
@@ -91,7 +94,7 @@ const WordJumble: React.FC = () => {
         <CardTitle>Word Jumble</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="mb-4">Unscramble the Python keyword or concept ( _ = <i>space</i> <small>(sometimes)</small>):</p>
+        <p className="mb-4">Unscramble the programming keyword or concept ( _ = <i>space</i>):</p>
         {/* Numeric progress indicator */}
         <div className="flex justify-between items-center mb-1 text-sm text-gray-600">
           <span>{currentIndex} / {deckOrder.length}</span>

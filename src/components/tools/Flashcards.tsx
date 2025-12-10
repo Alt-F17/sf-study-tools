@@ -3,19 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useToolsStore } from "@/store/toolsStore";
-import flashcardsData from '@/data/flashcards.json';
 
-interface Flashcard {
+export interface Flashcard {
   front: string;
   back: string;
 }
 
-const Flashcards: React.FC = () => {
+interface FlashcardsProps {
+  data: Flashcard[];
+}
+
+const Flashcards: React.FC<FlashcardsProps> = ({ data }) => {
   const { flashcardsState, updateFlashcardsState, initFlashcards } = useToolsStore();
   const { deckOrder, currentIndex, knownIndices, isFlipped } = flashcardsState;
 
   // Remove inline state declaration for flashcards
-  const flashcards: Flashcard[] = flashcardsData as Flashcard[];
+  const flashcards: Flashcard[] = data;
 
   // Initialize flashcards if needed
   useEffect(() => {
@@ -65,7 +68,7 @@ const Flashcards: React.FC = () => {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>SF2 Flashcards</CardTitle>
+        <CardTitle>SF Flashcards</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="mb-4 text-center">Click the card to flip it. Use buttons to mark as known or unknown.</p>

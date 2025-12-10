@@ -34,6 +34,15 @@ interface SpotBugState {
   answered: Record<number, boolean>;
 }
 
+// HTTPStatusQuiz
+interface HTTPStatusQuizState {
+  deckOrder: number[];
+  currentIndex: number;
+  correctCount: number;
+  wrongCount: number;
+  answered: Record<number, boolean>;
+}
+
 interface ToolsState {
   // Active tool
   activeTool: string | null;
@@ -58,6 +67,11 @@ interface ToolsState {
   spotBugState: SpotBugState;
   initSpotBug: (totalProblems: number) => void;
   updateSpotBugState: (updates: Partial<SpotBugState>) => void;
+
+  // HTTPStatusQuiz state
+  httpStatusQuizState: HTTPStatusQuizState;
+  initHttpStatusQuiz: (totalQuestions: number) => void;
+  updateHttpStatusQuizState: (updates: Partial<HTTPStatusQuizState>) => void;
 }
 
 // Helper to shuffle arrays
@@ -157,6 +171,28 @@ export const useToolsStore = create<ToolsState>()(
       })),
       updateSpotBugState: (updates) => set((state) => ({
         spotBugState: { ...state.spotBugState, ...updates }
+      })),
+
+      // HTTPStatusQuiz
+      httpStatusQuizState: {
+        deckOrder: [],
+        currentIndex: 0,
+        correctCount: 0,
+        wrongCount: 0,
+        answered: {},
+      },
+      initHttpStatusQuiz: (totalQuestions) => set((state) => ({
+        httpStatusQuizState: {
+          ...state.httpStatusQuizState,
+          deckOrder: shuffleArray(Array.from({ length: totalQuestions }, (_, i) => i)),
+          currentIndex: 0,
+          correctCount: 0,
+          wrongCount: 0,
+          answered: {},
+        }
+      })),
+      updateHttpStatusQuizState: (updates) => set((state) => ({
+        httpStatusQuizState: { ...state.httpStatusQuizState, ...updates }
       })),
     }),
     {

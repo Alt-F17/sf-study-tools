@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface Tool {
   id: string;
@@ -14,10 +16,12 @@ interface MainLayoutProps {
   tools: Tool[];
   activeTool: string | null;
   onToolSelect: (toolId: string) => void;
+  title?: string;
 }
 
-const MainLayout = ({ children, tools, activeTool, onToolSelect }: MainLayoutProps) => {
+const MainLayout = ({ children, tools, activeTool, onToolSelect, title = "SF2 Study Tools" }: MainLayoutProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -86,9 +90,16 @@ const MainLayout = ({ children, tools, activeTool, onToolSelect }: MainLayoutPro
             : "hidden md:flex md:flex-col"
         )}
       >
-        <div className="p-4 text-center">
-          <h1 className="text-xl font-bold">SF2 Study Tools</h1>
-          <p className="text-sm text-gray-400 mt-1">Made by Felix - SF2 / 2025</p>
+        <div className="p-4 text-center relative">
+          <button 
+            onClick={() => navigate('/')}
+            className="absolute left-4 top-4 p-1 hover:bg-gray-700 rounded-full transition-colors"
+            title="Back to Home"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <h1 className="text-xl font-bold">{title}</h1>
+          <p className="text-sm text-gray-400 mt-1">Made by Felix - {title.split(' ')[0]} / 2025</p>
         </div>
         <Separator className="bg-gray-700" />
         <nav className="flex-1 overflow-y-auto p-2">

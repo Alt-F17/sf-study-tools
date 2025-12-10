@@ -1,11 +1,19 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import additionalResources from '@/data/additionalResources.json';
 
-const AdditionalResources: React.FC = () => {
+export interface Resource {
+  title: string;
+  url: string;
+}
+
+interface AdditionalResourcesProps {
+  data: Resource[];
+}
+
+const AdditionalResources: React.FC<AdditionalResourcesProps> = ({ data }) => {
   // Cast imported JSON to typed array
-  const resources = additionalResources as { title: string; url: string }[];
+  const resources = data;
   return (
     <div className="space-y-8">
       <Card>
@@ -15,48 +23,6 @@ const AdditionalResources: React.FC = () => {
         <CardContent>
           <p className="mb-4">
             A few more tools to help you in your studies. Good luck with your exams!
-            <br />
-            <Separator className="my-4" />
-            <b>Things to know for the Final:</b>
-            <ul className="list-disc list-inside">
-                <li>Data Science Library (Pandas, Matplotlib, Numpy)</li>
-                <li>Debugging</li>
-                <li>2D lists, nested loops, referencing (pointers), tuples</li>
-                <li>List Comprehensions: map, filter</li>
-                <li>Dictionaries, nested dictionaries, sets</li>
-                <li>Exceptions, Files (you are expected to know the type of errors)</li>
-                <li>
-                Object / Classes
-                <ul className="list-disc list-inside ml-5">
-                  <li>basic classes + annotations</li>
-                  <li>containment (has-a)</li>
-                  <li>inheritance (is-a) (multiple inheritance)</li>
-                  <li>abstract classes</li>
-                  <li>polymorphism</li>
-                  <li>relational operators + total ordering + arithmetic operators</li>
-                  <li>iterators: __iter__</li>
-                  <li>iterable: __next__</li>
-                </ul>
-                </li>
-                <li>
-                Stacks ADT:
-                <ul className="list-disc list-inside ml-5">
-                  <li>push, pop, top, is_empty, repr, len</li>
-                </ul>
-                </li>
-                <li>Recursion</li>
-                <li>
-                Sorting & searching algorithms:
-                <ul className="list-disc list-inside ml-5">
-                  <li>selection sort</li>
-                  <li>merge sort</li>
-                  <li>quick sort</li>
-                  <li>insertion sort</li>
-                  <li>binary search</li>
-                  <li>bisect module</li>
-                </ul>
-                </li>
-            </ul>
           </p>
         </CardContent>
       </Card>
@@ -93,10 +59,12 @@ const AdditionalResources: React.FC = () => {
             <li>A tool made by: Felix Egan (SF2 - W25)</li>
             <br />
             <b>Many thanks to:</b>
-            <li>Eric Mayhew and Louisa Harutyunyan for their amazing teaching throughout semesters 1 and 2</li>
+            <li>Eric Mayhew, Louisa Harutyunyan and Lei for their amazing teaching throughout semesters 1 and 2</li>
             <li>Louisa Harutyunyan for the original concepTests (idk if I'm allowed to keep those actually... oh well)</li>
-            <li>Ke Yin for sharing his notes for all to use</li>
             <li>Evan Luo for also sharing his notes!</li>
+            <li>Do people actually read these credits?</li>
+            <li>Ngl, without my coffee machine, this wouldn't work... Props to you coffee machine!</li>
+            <li>Anyways, thanks for using this silly tool. If it breaks, blame the coffee machine.</li>
             <br />
             <Separator className="my-4" />
             I may (or may not) have burnt an unfathomable amount of unrecoverable hours of sleep making this...

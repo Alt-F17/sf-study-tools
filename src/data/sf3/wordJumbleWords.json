@@ -57,7 +57,7 @@
   { "word": "validator", "hint": "Tool used to check if HTML or CSS code follows the standards" },
   { "word": "w3c", "hint": "World Wide Web Consortium, the main international standards organization for the World Wide Web" },
   { "word": "eslint", "hint": "Tool for identifying and reporting on patterns found in JavaScript code" },
-  { "word": "linting ", "hint": "Process of running a program that analyzes code for potential errors" },
+  { "word": "linting", "hint": "Process of running a program that analyzes code for potential errors" },
   { "word": "copyright", "hint": "Legal right that grants the creator of an original work exclusive rights for its use and distribution" },
   { "word": "public_domain", "hint": "Creative materials that are not protected by intellectual property laws" },
   { "word": "creative_commons", "hint": "License that allows creators to grant permission for others to use their work" },
